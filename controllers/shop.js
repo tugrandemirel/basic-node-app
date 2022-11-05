@@ -10,9 +10,11 @@ module.exports.getIndex = (req, res, next) =>{
 }
 
 module.exports.getProducts = (req, res, next) =>{
+    const products = Product.getAll();
     res.render('shop/products', {
         title: 'Products',
-        path: '/'
+        products: products,
+        path: '/products'
     })
 }
 
