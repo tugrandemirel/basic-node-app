@@ -17,6 +17,12 @@ module.exports.getProducts = (req, res, next) =>{
         path: '/products'
     })
 }
+module.exports.getProduct = (req, res, next) =>{
+   const productId = req.params.productid;
+    console.log(productId)
+    console.log(Product.getById((productId)))
+   res.redirect('/');
+}
 
 module.exports.getProductDetails = (req, res, next) =>{
     res.render('shop/details', {
