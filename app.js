@@ -10,7 +10,6 @@ app.set('views', 'views');
 const adminRoutes = require('./routes/admin');
 const userRoutes = require('./routes/shop');
 
-
 const errorController = require('./controllers/errors')
 
 app.use(bodyParser.urlencoded({extended: false}))
