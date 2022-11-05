@@ -18,6 +18,6 @@ block content
                             td #{product.name}
                             td #{product.price} TL
                             td
-                                a.btn.btn-primary.btn-sm(href="details/1") Edit
+                                a.btn.btn-primary.btn-sm(href=`admin /products/${product.id}`) Edit
         else
             h1 No products found
