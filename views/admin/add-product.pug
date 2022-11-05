@@ -2,7 +2,7 @@ extends layouts/main-layout.pug
 block content 
     form(action="/admin/add-product" method="post")
                         div.form-group.row
-                            label( for="name").col-sm-2.col-form-label Product Name
+                            label( for="name").col-sm-2.col-form-label Admin Name
                             div.col-md-10
                                 input( type="text"  name="name")#productName.form-control
                         
@@ -23,4 +23,4 @@ block content
                         
                         div.form-group.row
                             div.col-md-10.offset-sm-2
-                                input(type="submit" value="Save Product").btn.btn-primary
+                                input(type="submit" value="Save Admin").btn.btn-primary

@@ -1,4 +1,4 @@
-const getProducts = require("../controllers/product");
+const getProducts = require("../controllers/admin");
 
 const products = [];
 module.exports = class Product{

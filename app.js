@@ -8,10 +8,10 @@ app.set('view engine', 'pug');
 // pug dosyalarını views klasörü içerisinde kullanacağımızı belirttik
 app.set('views', 'views');
 const adminRoutes = require('./routes/admin');
-const userRoutes = require('./routes/user');
+const userRoutes = require('./routes/shop');
 
 
-const errorController = require('./controllers/error')
+const errorController = require('./controllers/errors')
 
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.static(path.join(__dirname, 'public')))

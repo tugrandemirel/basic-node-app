@@ -1,11 +1,11 @@
-extends layouts/main-layout.pug
-include mixins/createProduct.pug
+extends ../layouts/main-layout.pug
+include ../mixins/createProduct.pug
 block content 
-        include includes/slider.pug
+        include ../includes/slider.pug
         div.row
             if products.length > 0
                 each product in products
                     +createProduct(product)
             else 
-                h1 No Product
+                h1 No Admin
                 
