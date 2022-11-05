@@ -19,9 +19,12 @@ module.exports.getProducts = (req, res, next) =>{
 }
 module.exports.getProduct = (req, res, next) =>{
    const productId = req.params.productid;
-    console.log(productId)
-    console.log(Product.getById((productId)))
-   res.redirect('/');
+   const product= Product.getById((productId));
+   res.render('shop/product-detail', {
+       title: product.name,
+       product: product,
+       path: '/products'
+   })
 }
 
 module.exports.getProductDetails = (req, res, next) =>{
