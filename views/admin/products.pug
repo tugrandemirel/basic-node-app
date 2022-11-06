@@ -1,6 +1,8 @@
 extends ../layouts/main-layout.pug
 
 block content
+    if(action !== 'undefined' &&action === 'edit')
+        div.alert.alert-success(role="alert") Admin Updated
     .row
         if typeof products && products.length > 0
            table.table.table-bordered
