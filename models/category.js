@@ -3,7 +3,7 @@ const categories = [
     {id: "2", name: "Bilgisayar", description: "Bilgisayar kategorisi"},
     {id: "3", name: "Beyaz Eşya", description: "Beyaz Eşya kategorisi"}
 ]
-exports = class Category{
+module.exports = class Category{
     constructor(name, description) {
         this.id = (categories.length + 1).toString();
         this.name = name;
