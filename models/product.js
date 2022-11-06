@@ -7,12 +7,13 @@ const products = [
     {id:"78" ,name: 'Apple', price: 1.99, imageUrl: 'product4.jpg', description: 'A red apple', categoryid: "1"},
 ];
 module.exports = class Product{
-    constructor(name, price, imageUrl, description){
+    constructor(name, price, imageUrl, description, categoryid){
         this.id = (Math.floor(Math.random() * 99999) + 1).toString();
         this.name = name
         this.price = price
         this.imageUrl = imageUrl
         this.description = description
+        this.categoryid = categoryid
     }
 
     saveProduct(){

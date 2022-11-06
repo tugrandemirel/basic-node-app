@@ -3,7 +3,7 @@ block content
     form(action="/admin/products" method="post")
         input(type="hidden" name="id" value=`${product.id}`)
         div.form-group.row
-            label( for="name").col-sm-2.col-form-label Admin Name
+            label( for="name").col-sm-2.col-form-label Product Name
             div.col-md-10
                 input( type="text"  name="name" value=`${product.name}`)#name.form-control
 
@@ -11,6 +11,14 @@ block content
             label( for="price").col-sm-2.col-form-label Price
             div.col-md-10
                 input( type="text"  name="price" value=`${product.price}`)#price.form-control
+
+        div.form-group.row
+            label( for="categoryid").col-sm-2.col-form-label Image
+            div.col-md-10
+                select( name="categoryid")#categoryid.form-control
+                    option(value="-1") Select Category
+                    each category in categories
+                        option(value=`${category.id}` selected=category.id===product.categoryid) #{category.name}
 
         div.form-group.row
             label( for="description").col-sm-2.col-form-label Description
