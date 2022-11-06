@@ -1,9 +1,13 @@
 extends ../layouts/main-layout.pug
 include ../mixins/createProduct.pug
 block content
-    div.row
-        if products.length > 0
-            each product in products
-                +createProduct(product)
-        else
-            h1 No Products Found
+    .row
+        .col-md-3
+            include ../includes/menu.pug
+        .col-md-9
+            div.row
+                if products.length > 0
+                    each product in products
+                        +createProduct(product)
+                else
+                    h1 No Products Found
