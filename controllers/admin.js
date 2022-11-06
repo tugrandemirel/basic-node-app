@@ -47,3 +47,9 @@ exports.postEditProduct = (req, res, next) => {
     Product.Update(product);
     res.redirect('/admin/products?action=edit')
 }
+
+exports.postDeleteProduct = (req, res, next) => {
+    const product = req.body.id;
+    Product.DeleteById(product);
+    res.redirect('/admin/products?action=delete')
+}
