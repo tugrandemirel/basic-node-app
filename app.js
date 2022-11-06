@@ -18,11 +18,6 @@ app.use(express.static(path.join(__dirname, 'public')))
 // routes
 app.use('/admin', adminRoutes);
 app.use(userRoutes);
-
-/*
-app.set('title', 'My Sİte')
-console.log(app.get('title'));
-*/
 app.use(errorController.get404Page)
 
 app.listen(3000, ()=>{

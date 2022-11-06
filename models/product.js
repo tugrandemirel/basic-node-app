@@ -1,33 +1,29 @@
-const connection = require('../utility/database');
-module.exports = class Product{
-    constructor(name, price, imageUrl, description, categoryid){
-        this.name = name
-        this.price = price
-        this.imageUrl = imageUrl
-        this.description = description
-        this.categoryid = categoryid
-    }
+const Sequlize = require('sequelize');
+const sequelize = require('../utility/database');
 
-    saveProduct(){
-        return connection.execute('INSERT INTO products (category_id, name, imageUrl, description, price) VALUES (?, ?, ?, ?, ?)', [ this.categoryid, this.name, this.imageUrl, this.description, this.price]);
+const Product = sequelize.define('products', {
+    id:{
+        type: Sequlize.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true
+    },
+    name: {
+        type: Sequlize.STRING,
+        allowNull: false
+    },
+    price: {
+        type: Sequlize.DOUBLE,
+        allowNull: false
+    },
+    imageUrl: {
+        type: Sequlize.STRING,
+        allowNull: false
+    },
+    description: {
+        type: Sequlize.STRING,
+        allowNull: true
     }
+});
 
-    static getAll(){
-       return connection.execute('SELECT * FROM products');
-    }
-
-    static getById(id) {
-        return connection.execute('SELECT * FROM products WHERE id = ?', [id]);
-    }
-
-    static getProductsByCategoryId(categoryid) {
-
-    }
-    static Update(product){
-        return connection.execute('UPDATE products SET category_id = ?, name = ?, imageUrl = ?, description = ?, price = ? WHERE id = ?', [product.categoryid, product.name, product.imageUrl, product.description, product.price, product.id]);
-    }
-
-    static DeleteById(id){
-        return connection.execute('DELETE FROM products WHERE id = ?', [id]);
-    }
-}
+module.exports = Product;
