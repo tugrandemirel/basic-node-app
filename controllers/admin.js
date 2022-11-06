@@ -34,14 +34,20 @@ exports.postAddProduct = (req, res, next) => {
 }
 
  exports.getEditProduct = (req, res, next) =>{
-    const product = Product.getById(req.params.productid);
     const categories = Category.getAll();
-    res.render('admin/edit-product', {
-        title: 'Edit Product',
-        product: product,
-        categories: categories,
-        path: '/admin/products'
-    });
+    Product.getById(req.params.productid)
+        .then((product) => {
+            res.render('admin/edit-product', {
+                title: 'Edit Product',
+                product: product[0][0],
+                categories: categories,
+                path: '/admin/products'
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+
 }
 
 exports.postEditProduct = (req, res, next) => {
