@@ -46,8 +46,6 @@ module.exports.getProductsByCategoryId = (req, res, next) =>{
 module.exports.getProduct = (req, res, next) =>{
    const productId = req.params.productid;
    Product.getById((productId)).then((product) =>{
-       console.log(product[0]);
-       console.log(product[0][0].name);
        res.render('shop/product-detail', {
             title: product[0][0].name,
             product: product[0][0],

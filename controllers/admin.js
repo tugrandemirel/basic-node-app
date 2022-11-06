@@ -15,11 +15,17 @@ module.exports.getProducts = (req, res, next) =>{
  }
 
  exports.getAddProduct = (req, res, next) =>{
-    res.render('admin/add-product', {
-        title: 'Add a new product',
-        categories: Category.getAll(),
-        path: '/admin/add-product'
-    });
+    Category.getAll()
+        .then((categories) => {
+            res.render('admin/add-product', {
+                title: 'Add a new product',
+                categories: categories[0],
+                path: '/admin/add-product'
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+        })
 }
 
 exports.postAddProduct = (req, res, next) => {
@@ -39,15 +45,22 @@ exports.postAddProduct = (req, res, next) => {
 }
 
  exports.getEditProduct = (req, res, next) =>{
-    const categories = Category.getAll();
     Product.getById(req.params.productid)
         .then((product) => {
-            res.render('admin/edit-product', {
-                title: 'Edit Product',
-                product: product[0][0],
-                categories: categories,
-                path: '/admin/products'
-            });
+            Category.getAll()
+                .then((categories) => {
+                    console.log(product[0][0].category_id);
+                    res.render('admin/edit-product', {
+                        title: 'Edit Product',
+                        product: product[0][0],
+                        categories: categories[0],
+                        path: '/admin/products'
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+
         })
         .catch((err) => {
             console.log(err);
