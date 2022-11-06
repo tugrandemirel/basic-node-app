@@ -8,8 +8,6 @@ app.set('view engine', 'pug');
 // pug dosyalarını views klasörü içerisinde kullanacağımızı belirttik
 app.set('views', 'views');
 
-const connection = require('./utility/database');
-
 const adminRoutes = require('./routes/admin');
 const userRoutes = require('./routes/shop');
 
@@ -20,13 +18,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 // routes
 app.use('/admin', adminRoutes);
 app.use(userRoutes);
-//
-// connection.execute('SELECT * FROM products')
-//     .then((result) => {
-//         console.log(result[0])
-//     }).catch((err) => {
-//         console.log(err)
-//     })
+
 /*
 app.set('title', 'My Sİte')
 console.log(app.get('title'));
