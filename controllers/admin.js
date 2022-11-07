@@ -37,14 +37,30 @@ exports.postAddProduct = (req, res, next) => {
     const imageUrl = req.body.imageUrl;
     const description = req.body.description;
     const categoryid = req.body.categoryid;
-    Product.create({ name: name, price: price, imageUrl: imageUrl, description: description, categoryId: categoryid})
+    const user = req.user;
+
+    /*Product.create({ name: name, price: price, imageUrl: imageUrl, description: description, categoryId: categoryid, userId: userid})
         .then((result) => {
             console.log(result);
             res.redirect('/');
         })
         .catch((err) => {
             console.log(err);
-        })
+        })*/
+    user.createProduct({
+        name: name,
+        price: price,
+        imageUrl: imageUrl,
+        description: description,
+        categoryId: categoryid
+    })
+    .then((result) => {
+        console.log(result);
+        res.redirect('/');
+    })
+    .catch((err) => {
+        console.log(err);
+    })
 }
 
  exports.getEditProduct = (req, res, next) =>{
@@ -80,6 +96,7 @@ exports.postEditProduct = (req, res, next) => {
     const imageUrl = req.body.imageUrl;
     const description = req.body.description;
     const categoryid = req.body.categoryid;
+    const userid = req.user.id;
 
     Product.findByPk(id)
         .then((product) => {
@@ -88,6 +105,7 @@ exports.postEditProduct = (req, res, next) => {
             product.imageUrl = imageUrl;
             product.description = description;
             product.categoryid = categoryid;
+            product.userId = userid;
             return product.save()
         })
         .then((result) => {
