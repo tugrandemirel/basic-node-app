@@ -32,8 +32,20 @@ Product.belongsTo(Category, {
 });
 Category.hasMany(Product);
 sequelize
-    .sync({force: true})
+    // .sync({force: true})
+    .sync()
     .then(result => {
+        Category.count()
+            .then(count =>{
+                if (count === 0) {
+                    Category.bulkCreate([
+                        {name: 'Telefon', description: 'Telefon kategorisi'},
+                        {name: 'Bilgisayar', description: 'Bilgisayar kategorisi'},
+                        {name: 'Elektronik', description: 'Elektronik kategorisi'}
+                    ])
+                }
+            })
+
         console.log(result)
     })
     .catch(err => {
