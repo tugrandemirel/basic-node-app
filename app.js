@@ -35,8 +35,8 @@ User.hasMany(Product);
 
 
 sequelize
-    // .sync({force: true})
     .sync()
+    // .sync({force: true})
     .then(result => {
         User.findByPk(1)
             .then((user) => {
