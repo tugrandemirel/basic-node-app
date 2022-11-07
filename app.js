@@ -52,11 +52,24 @@ sequelize
                 Category.count()
                     .then(count =>{
                         if (count === 0) {
-                            Category.bulkCreate([
+                              Category.bulkCreate([
                                 {name: 'Telefon', description: 'Telefon kategorisi'},
                                 {name: 'Bilgisayar', description: 'Bilgisayar kategorisi'},
                                 {name: 'Elektronik', description: 'Elektronik kategorisi'}
                             ])
+                        }
+                    })
+            })
+            .then((result) =>{
+                Product.count()
+                    .then((count) => {
+                        if (count ===0 ) {
+                            Product.bulkCreate([
+                                {name: 'Samsung S10', description: 'Samsung S10 telefon', imageUrl:'product1.jpg' , price: 5000, categoryId: 1, userId: 1},
+                                {name: 'Samsung S9', description: 'Samsung S9 telefon', imageUrl:'product1.jpg' , price: 4000, categoryId: 1, userId: 1},
+                                {name: 'Samsung S8', description: 'Samsung S8 telefon', imageUrl:'product1.jpg' , price: 3000, categoryId: 1, userId: 1},
+                                {name: 'Samsung S7', description: 'Samsung S7 telefon', imageUrl:'product1.jpg' , price: 2000, categoryId: 1, userId: 1}
+                            ]);
                         }
                     })
             })
