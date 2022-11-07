@@ -20,6 +20,8 @@ const sequelize = require('./utility/database');
 const Category = require('./models/category');
 const Product = require('./models/product');
 const User = require('./models/user');
+const Cart = require('./models/cart');
+const CartItem = require('./models/cartItem');
 
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.static(path.join(__dirname, 'public')))
@@ -49,7 +51,11 @@ Category.hasMany(Product);
 Product.belongsTo(User);
 User.hasMany(Product);
 
+User.hasOne(Cart);
+Cart.belongsTo(User);
 
+Cart.belongsToMany(Product, { through: CartItem });
+Product.belongsToMany(Cart, { through: CartItem });
 
 sequelize
     .sync()
