@@ -39,24 +39,17 @@ exports.postAddProduct = (req, res, next) => {
 }
 
  exports.getEditProduct = (req, res, next) =>{
-    Product.findByPk(req.params.productid)
+    Product.findById(req.params.productid)
         .then((product) => {
             if (!product) {
-                return res.redirect('/');
+                return res.redirect('back');
+            }else{
+                res.render('admin/edit-product', {
+                    title: 'Edit Product',
+                    product: product,
+                    path: '/admin/edit-product'
+                })
             }
-            Category.findAll()
-                .then((categories) => {
-                    res.render('admin/edit-product', {
-                        title: 'Edit Product',
-                        product: product,
-                        categories: categories,
-                        path: '/admin/products'
-                    });
-                })
-                .catch((err) => {
-                    console.log(err);
-                })
-
         })
         .catch((err) => {
             console.log(err);

@@ -22,9 +22,9 @@ block content
                             td #{product.name}
                             td #{product.price} TL
                             td
-                                a.btn.btn-primary.btn-sm.mr-2(href=`/admin/products/${product.id}`) Edit
+                                a.btn.btn-primary.btn-sm.mr-2(href=`/admin/products/${product._id}`) Edit
                                 form(action=`/admin/delete-product` method='POST' style="display: inline-block")
-                                    input(type="hidden" name="id" value=`${product.id}`)
+                                    input(type="hidden" name="productid" value=`${product._id}`)
                                     button.btn.btn-danger.btn-sm(type="submit") Delete
         else
             h1 No products found
