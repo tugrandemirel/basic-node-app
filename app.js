@@ -57,6 +57,7 @@ Cart.belongsTo(User);
 Cart.belongsToMany(Product, { through: CartItem });
 Product.belongsToMany(Cart, { through: CartItem });
 
+let _user;
 sequelize
     .sync()
     // .sync({force: true})
@@ -64,18 +65,22 @@ sequelize
         User.findByPk(1)
             .then((user) => {
                 if(!user){
-                    User.create({
-                        name: 'Ahmet',
-                        email: 'deneme@deneme.com'
-                    })
+                    User.create({name: 'Ahmet', email: 'deneme@deneme.com'})
                 }
                 return user;
-            })
-            .then((user) => {
+            }).then((user) => {
+                _user = user;
+                return user.getCart();
+            }).then((cart) => {
+                if(!cart){
+                    return _user.createCart();
+                }
+                return cart;
+            }).then(() => {
                 Category.count()
                     .then(count =>{
                         if (count === 0) {
-                              Category.bulkCreate([
+                            Category.bulkCreate([
                                 {name: 'Telefon', description: 'Telefon kategorisi'},
                                 {name: 'Bilgisayar', description: 'Bilgisayar kategorisi'},
                                 {name: 'Elektronik', description: 'Elektronik kategorisi'}
@@ -83,20 +88,8 @@ sequelize
                         }
                     })
             })
-            .then((result) =>{
-                Product.count()
-                    .then((count) => {
-                        if (count ===0 ) {
-                            Product.bulkCreate([
-                                {name: 'Samsung S10', description: 'Samsung S10 telefon', imageUrl:'product1.jpg' , price: 5000, categoryId: 1, userId: 1},
-                                {name: 'Samsung S9', description: 'Samsung S9 telefon', imageUrl:'product1.jpg' , price: 4000, categoryId: 1, userId: 1},
-                                {name: 'Samsung S8', description: 'Samsung S8 telefon', imageUrl:'product1.jpg' , price: 3000, categoryId: 1, userId: 1},
-                                {name: 'Samsung S7', description: 'Samsung S7 telefon', imageUrl:'product1.jpg' , price: 2000, categoryId: 1, userId: 1}
-                            ]);
-                        }
-                    })
-            })
-            })
+        console.log(result)
+    })
     .catch(err => {
                 console.log(err)
             })

@@ -100,10 +100,52 @@ module.exports.getProduct = (req, res, next) =>{
 }
 
 module.exports.getCart = (req, res, next) =>{
-    res.render('shop/cart', {
-        title: 'Cart',
-        path: '/cart'
-    })
+
+    req.user.getCart()
+        .then((cart) => {
+            return cart.getProducts()
+                .then((products) => {
+                    res.render('shop/cart', {
+                        title: 'Cart',
+                        products: products,
+                        path: '/cart'
+                    })
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }).catch(err =>{
+            console.log(err);
+        })
+}
+
+
+module.exports.postCart = (req, res, next) =>{
+
+    const productId = req.body.productId;
+    let quantity = 1;
+    let userCart
+    req.user.getCart()
+        .then((cart) => {
+            userCart = cart;
+            return cart.getProducts({where: {id: productId}});
+        }).then((products) => {
+            let product;
+            if(products.length > 0){
+                product = products[0]
+            }
+            if(product){
+                quantity = product.cartItem.quantity + 1;
+                return product
+            }
+            return Product.findByPk(productId)
+        }).then(product => {
+            return userCart.addProduct(product, {through: {quantity: quantity}})
+        }).then(() => {
+            res.redirect('/cart')
+        }).catch(err =>{
+            console.log(err);
+        })
 }
 
 module.exports.getOrders = (req, res, next) =>{
