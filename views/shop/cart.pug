@@ -35,6 +35,7 @@ block content
                     td #{total} TL
             div.text-center
                 a(href="/").btn.btn-primary Continue Shopping
-                a(href="/checkout").btn.btn-primary.ml-2 Checkout
+                form(action="/create-order" method="POST" style="display: inline-block")
+                    button(type="submit").btn.btn-primary.ml-2 Checkout
         else
             h1 No products found
