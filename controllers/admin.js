@@ -1,5 +1,5 @@
 const Product = require('../models/product')
-// const Category = require('../models/category')
+const Category = require('../models/category')
 
 module.exports.getProducts = (req, res, next) =>{
     Product.findAll()
@@ -85,4 +85,48 @@ exports.postDeleteProduct = (req, res, next) => {
         .catch((err) => {
             console.log(err);
         })
+}
+
+exports.getCategories = (req, res, next) => {
+    Category.findAll()
+        .then(categories => {
+            res.render('admin/categories', {
+                title: 'Admin Categories',
+                categories: categories,
+                path: '/admin/categories',
+                action: req.query.action
+        })
+        }).catch((error) => {console.log(error);})
+}
+
+exports.getAddCategory = (req, res, next) => {
+    res.render('admin/add-category', {
+        title: 'Add a new category',
+        path: '/admin/add-category'
+    });
+}
+
+exports.postAddCategory = (req, res, next) => {
+    const name = req.body.name;
+    const description = req.body.description;
+    const category = new Category(name, description, null)
+    category.save()
+        .then(() => {
+            res.redirect('/admin/add-category');
+        }).catch((err) => {
+            console.log(err);
+    })
+}
+
+exports.getCategories = (req, res, next) => {
+    Category.findAll()
+        .then((categories) => {
+            res.render('admin/categories', {
+                title: 'Admin Categories',
+                categories: categories,
+                path: '/admin/categories',
+                action: req.query.action
+            })
+        })
+        .catch((err) => { console.log(err) })
 }
