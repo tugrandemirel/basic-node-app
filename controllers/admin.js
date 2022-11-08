@@ -1,5 +1,5 @@
 const Product = require('../models/product')
-const Category = require('../models/category')
+// const Category = require('../models/category')
 
 module.exports.getProducts = (req, res, next) =>{
     Product.findAll()
@@ -16,50 +16,25 @@ module.exports.getProducts = (req, res, next) =>{
  }
 
  exports.getAddProduct = (req, res, next) =>{
-     Category.findAll()
-         .then((categories) => {
-             res.render('admin/add-product', {
-                 title: 'Add a new product',
-                 categories: categories,
-                 path: '/admin/add-product'
-             });
-         })
-         .catch((err) => {
-             console.log(err);
-         })
+     res.render('admin/add-product', {
+         title: 'Add a new product',
+         path: '/admin/add-product'
+     });
 }
 
 exports.postAddProduct = (req, res, next) => {
-    const product = new Product()
 
     const name = req.body.name;
     const price = req.body.price;
     const imageUrl = req.body.imageUrl;
     const description = req.body.description;
-    const categoryid = req.body.categoryid;
-    const user = req.user;
 
-    /*Product.create({ name: name, price: price, imageUrl: imageUrl, description: description, categoryId: categoryid, userId: userid})
-        .then((result) => {
-            console.log(result);
-            res.redirect('/');
-        })
-        .catch((err) => {
+    const product = new Product(name, price, description, imageUrl)
+    product.save()
+        .then(() => {
+            res.redirect('/admin/products');
+        }).catch((err) => {
             console.log(err);
-        })*/
-    user.createProduct({
-        name: name,
-        price: price,
-        imageUrl: imageUrl,
-        description: description,
-        categoryId: categoryid
-    })
-    .then((result) => {
-        console.log(result);
-        res.redirect('/');
-    })
-    .catch((err) => {
-        console.log(err);
     })
 }
 
