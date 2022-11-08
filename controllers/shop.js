@@ -119,7 +119,6 @@ module.exports.getCart = (req, res, next) =>{
         })
 }
 
-
 module.exports.postCart = (req, res, next) =>{
 
     const productId = req.body.productId;
