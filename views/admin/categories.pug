@@ -1,6 +1,8 @@
 extends ../layouts/main-layout.pug
 
 block content
+    if(action !== 'undefined' &&action === 'create')
+        div.alert.alert-success(role="alert") Admin Created
     if(action !== 'undefined' &&action === 'edit')
         div.alert.alert-success(role="alert") Admin Updated
     if action !== 'undefined' &&action === 'delete'
@@ -10,17 +12,14 @@ block content
            table.table.table-bordered
                 thead
                     tr
-                        th(style="width:100px;") Image
                         th Name
-                        th(style="width:150px;") Price
+                        th Description
                         th(style="width:133px;") Action
                 tbody
                     each category in categories
                         tr
-                            td
-                                img(src=`/img/${category.imageUrl}`, width="80")
                             td #{category.name}
-                            td #{category.price} TL
+                            td #{category.description}
                             td
                                 a.btn.btn-primary.btn-sm.mr-2(href=`/admin/categories/${category._id}`) Edit
                                 form(action=`/admin/delete-category` method='POST' style="display: inline-block")

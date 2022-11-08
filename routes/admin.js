@@ -13,9 +13,14 @@ router.post('/products', productsController.postEditProduct);
 router.post('/delete-product', productsController.postDeleteProduct);
 
 
-router.get('/add-category', productsController.getAddCategory)
-router.post('/add-category', productsController.postAddCategory)
 router.get('/categories', productsController.getCategories)
 
+router.get('/add-category', productsController.getAddCategory)
+router.post('/add-category', productsController.postAddCategory)
+
+router.get('/categories/:categoryid', productsController.getEditCategory)
+router.post('/categories', productsController.postEditCategories);
+
+router.post('/delete-category', productsController.postDeleteCategory);
 
 module.exports = router;
