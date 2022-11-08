@@ -147,6 +147,22 @@ module.exports.postCart = (req, res, next) =>{
         })
 }
 
+module.exports.postCartItemDelete = (req, res, next) =>{
+    const productId = req.body.productid;
+    req.user
+        .getCart()
+        .then((cart) => {
+            return cart.getProducts({where: {id: productId}})
+        }).then((products) => {
+            const product = products[0];
+            return product.cartItem.destroy();
+        }).then(() => {
+            res.redirect('/cart')
+        }).catch(err => {
+        console.log(err);
+        })
+}
+
 module.exports.getOrders = (req, res, next) =>{
     res.render('shop/orders', {
         title: 'Orders',

@@ -25,7 +25,7 @@ block content
                             td #{product.cartItem.quantity}
                             td
                                 form(action=`/delete-cartitem` method='POST' style="display: inline-block")
-                                    input(type="hidden" name="id" value=`${product.id}`)
+                                    input(type="hidden" name="productid" value=`${product.id}`)
                                     button.btn.btn-danger.btn-sm(type="submit") Delete
                 tfoot
                     td(colspan="4")
