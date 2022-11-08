@@ -13,4 +13,9 @@ router.post('/products', productsController.postEditProduct);
 router.post('/delete-product', productsController.postDeleteProduct);
 
 
+router.get('/add-category', productsController.getAddCategory)
+router.post('/add-category', productsController.postAddCategory)
+router.get('/categories', productsController.getCategories)
+
+
 module.exports = router;
