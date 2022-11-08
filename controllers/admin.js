@@ -112,7 +112,7 @@ exports.postAddCategory = (req, res, next) => {
     const category = new Category(name, description, null)
     category.save()
         .then(() => {
-            res.redirect('/admin/add-category');
+            res.redirect('/admin/categories?action=create');
         }).catch((err) => {
             console.log(err);
     })
@@ -129,4 +129,50 @@ exports.getCategories = (req, res, next) => {
             })
         })
         .catch((err) => { console.log(err) })
+}
+
+
+exports.getEditCategory = (req, res, next) => {
+    Category.findById(req.params.categoryid)
+        .then((category) => {
+            console.log(category)
+            if (!category) {
+                return res.redirect('back');
+            }else{
+                res.render('admin/edit-category', {
+                    title: 'Edit Category',
+                    category: category,
+                    path: '/admin/edit-category'
+                })
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}
+
+exports.postEditCategories = (req, res, next) => {
+    const categoryid = req.body.categoryid;
+    const name = req.body.name;
+    const description = req.body.description;
+    const category = new Category(name, description, categoryid)
+    category.save()
+        .then(() => {
+            console.log('Category has been updated')
+            res.redirect('/admin/categories?action=edit');
+        })
+        .catch((err) => {console.log(err);})
+
+}
+
+exports.postDeleteCategory = (req, res, next) => {
+    const categoryid = req.body.categoryid;
+    console.log(categoryid)
+    Category.deleteById(categoryid)
+        .then(() => {
+            console.log('Category has been deleted')
+            res.redirect('/admin/categories?action=delete');
+        })
+        .catch((err) => {console.log(err);})
+
 }
