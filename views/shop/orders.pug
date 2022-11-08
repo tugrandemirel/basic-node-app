@@ -17,7 +17,8 @@ block content
                             tr
                                 td
                                     img(src=`/img/${product.imageUrl}`, width="80")
-                                td #{product.name}
+                                td
+                                    a(href=`/product/${product.id}`)= product.name
                                 td #{product.orderItem.quantity}
                                 td #{product.price} TL
                     tfoot
