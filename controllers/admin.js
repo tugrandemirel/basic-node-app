@@ -63,21 +63,11 @@ exports.postEditProduct = (req, res, next) => {
     const price = req.body.price;
     const imageUrl = req.body.imageUrl;
     const description = req.body.description;
-    const categoryid = req.body.categoryid;
-    const userid = req.user.id;
-
-    Product.findByPk(id)
-        .then((product) => {
-            product.name = name;
-            product.price = price;
-            product.imageUrl = imageUrl;
-            product.description = description;
-            product.categoryid = categoryid;
-            product.userId = userid;
-            return product.save()
-        })
-        .then((result) => {
-            console.log(result);
+    // const categoryid = req.body.categoryid;
+    // const userid = req.user.id;
+    const product = new Product(name, price, description, imageUrl, id)
+    product.save()
+        .then(() => {
             res.redirect('/admin/products?action=edit');
         })
         .catch((err) => {
