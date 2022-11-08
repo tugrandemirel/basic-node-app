@@ -23,7 +23,8 @@ class Product{
     static findAll(){
         const db = getdb();
         return db.collection('products')
-            .find({})
+            .find()
+            .project({name: 1, price: 1, imageUrl: 1}) // sadece name, price ve imageUrl alanlarını getir
             .toArray()
             .then(products =>{
                 return products;
