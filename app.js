@@ -10,7 +10,7 @@ app.set('views', 'views');
 
 // Routes
 const adminRoutes = require('./routes/admin');
-// const userRoutes = require('./routes/shop');
+const userRoutes = require('./routes/shop');
 
 //Controllers
 const errorController = require('./controllers/errors')
@@ -23,7 +23,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 // routes
 app.use('/admin', adminRoutes);
-// app.use(userRoutes);
+app.use(userRoutes);
 app.use(errorController.get404Page)
 
 mongoConnect(() => {
