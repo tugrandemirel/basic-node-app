@@ -17,9 +17,21 @@ const errorController = require('./controllers/errors')
 
 const mongoConnect = require('./utility/database').mongoConnect;
 
+const User = require('./models/user');
+
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.static(path.join(__dirname, 'public')))
 
+app.use((req, res, next) => {
+    User.findByUserName('tugran')
+        .then((user) => {
+            req.user = new User(user.name, user.email, user._id)
+            next();
+        })
+        .catch(err => {
+            console.log(err);
+        })
+})
 
 // routes
 app.use('/admin', adminRoutes);
@@ -27,5 +39,19 @@ app.use(userRoutes);
 app.use(errorController.get404Page)
 
 mongoConnect(() => {
-    app.listen(3000);
+
+    User.findByUserName('tugran')
+        .then(user => {
+            if (!user){
+                const user = new User('tugran', 'email@email.com');
+                user.save();
+            }
+            return user;
+        }).then(user => {
+            console.log(user);
+            app.listen(3000);
+        }).
+        catch((err) => {
+            console.log(err)
+        })
 })
