@@ -164,10 +164,20 @@ module.exports.postCartItemDelete = (req, res, next) =>{
 }
 
 module.exports.getOrders = (req, res, next) =>{
-    res.render('shop/orders', {
-        title: 'Orders',
-        path: '/orders'
-    })
+    req.user
+        .getOrders({include: ['products']})
+        .then((orders) => {
+            console.log(orders)
+            res.render('shop/orders', {
+                title: 'Orders',
+                orders: orders,
+                path: '/orders'
+            })
+        })
+        .catch(err => {
+            console.log(err);
+        })
+
 }
 module.exports.postOrders = (req, res, next) =>{
     console.log('here')
