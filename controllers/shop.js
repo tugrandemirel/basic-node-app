@@ -1,14 +1,22 @@
 const Product = require('../models/product')
-// const Category = require('../models/category')
+const Category = require('../models/category')
 
 module.exports.getIndex = (req, res, next) =>{
     Product.findAll()
         .then(products => {
-            res.render('shop/index', {
-                title: 'Shopping',
-                products: products,
-                path: '/'
-            })
+            Category.findAll()
+                .then(categories => {
+                    res.render('shop/index', {
+                        title: 'Shopping',
+                        products: products,
+                        categories: categories,
+                        path: '/'
+                    })
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+
         }).catch(err => {
             console.log(err);
     })
@@ -17,12 +25,19 @@ module.exports.getIndex = (req, res, next) =>{
 module.exports.getProducts = (req, res, next) =>{
     Product.findAll()
         .then(products => {
+            Category.findAll()
+                .then(categories => {
                     res.render('shop/products', {
                         title: 'Products',
                         products: products,
-                        // categories: categories,
+                        categories: categories,
                         path: '/'
                     })
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+
                 })
         .catch((error) => {
             console.log(error);
@@ -35,8 +50,7 @@ module.exports.getProductsByCategoryId = (req, res, next) =>{
     Category.findAll()
         .then((categories) => {
             model.categories = categories;
-            const category = categories.find(i => i.id == categoryid);
-            return category.getProducts()
+            return Product.findByCategoryId(categoryid)
         })
         .then((products) =>{
             res.render('shop/products', {
@@ -50,8 +64,6 @@ module.exports.getProductsByCategoryId = (req, res, next) =>{
         .catch(err => {
             console.log(err);
         })
-
-
 }
 
 module.exports.getProduct = (req, res, next) =>{
