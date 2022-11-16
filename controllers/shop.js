@@ -94,6 +94,7 @@ module.exports.getCart = (req, res, next) =>{
 
     req.user.getCart()
         .then((products) => {
+            console.log(products)
             res.render('shop/cart', {
                 title: 'Cart',
                 products: products,
