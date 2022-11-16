@@ -22,7 +22,28 @@ class User{
     }
 
     getCart(){
-        return this.cart.items;
+        const ids = this.cart.items.map( i => {
+            return i.productId;
+        })
+        const db = getdb();
+        return db.collection('products')
+            .find({
+                _id: { $in: ids}
+            })
+            .toArray()
+            .then(products => {
+                return products.map(p => {
+                    return {
+                        ...p,
+                        quantity: this.cart.items.find(i => {
+                            return i.productId.toString() === p._id.toString();
+                        }).quantity
+                    }
+                })
+            }).catch(err => {
+                console.log(err);
+            })
+        console.log(ids);
     }
 
     addToCart(product){
