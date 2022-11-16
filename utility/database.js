@@ -11,6 +11,7 @@ const mongoConnect = (callback) =>{
             _db = client.db('node-app');
             callback(client);
         }).catch(err => {
+        console.log('Baglantı hatassı')
         console.log(err);
         throw err;
     })
