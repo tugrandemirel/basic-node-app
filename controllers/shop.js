@@ -93,18 +93,12 @@ module.exports.getProduct = (req, res, next) =>{
 module.exports.getCart = (req, res, next) =>{
 
     req.user.getCart()
-        .then((cart) => {
-            return cart.getProducts()
-                .then((products) => {
-                    res.render('shop/cart', {
-                        title: 'Cart',
-                        products: products,
-                        path: '/cart'
-                    })
-                })
-                .catch(err => {
-                    console.log(err);
-                })
+        .then((products) => {
+            res.render('shop/cart', {
+                title: 'Cart',
+                products: products,
+                path: '/cart'
+            })
         }).catch(err =>{
             console.log(err);
         })
@@ -113,29 +107,14 @@ module.exports.getCart = (req, res, next) =>{
 module.exports.postCart = (req, res, next) =>{
 
     const productId = req.body.productId;
-    let quantity = 1;
-    let userCart
-    req.user.getCart()
-        .then((cart) => {
-            userCart = cart;
-            return cart.getProducts({where: {id: productId}});
-        }).then((products) => {
-            let product;
-            if(products.length > 0){
-                product = products[0]
-            }
-            if(product){
-                quantity = product.cartItem.quantity + 1;
-                return product
-            }
-            return Product.findByPk(productId)
-        }).then(product => {
-            return userCart.addProduct(product, {through: {quantity: quantity}})
-        }).then(() => {
-            res.redirect('/cart')
-        }).catch(err =>{
-            console.log(err);
+    Product.findById(productId)
+        .then(product => {
+            return req.user.addToCart(product)
         })
+        .then(() => {
+            res.redirect('/cart')
+        })
+        .catch(err => console.log(err))
 }
 
 module.exports.postCartItemDelete = (req, res, next) =>{

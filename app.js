@@ -25,7 +25,8 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use((req, res, next) => {
     User.findByUserName('tugran')
         .then((user) => {
-            req.user = new User(user.name, user.email, user._id)
+            console.log(user);
+            req.user = new User(user.name, user.email, user.cart, user._id)
             next();
         })
         .catch(err => {
@@ -39,7 +40,6 @@ app.use(userRoutes);
 app.use(errorController.get404Page)
 
 mongoConnect(() => {
-
     User.findByUserName('tugran')
         .then(user => {
             if (!user){

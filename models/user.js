@@ -2,9 +2,11 @@ const getdb = require('../utility/database').getdb;
 const mongodb = require('mongodb');
 
 class User{
-    constructor(name, email, id) {
+    constructor(name, email, cart, id) {
         this.name = name;
         this.email = email;
+        this.cart = cart ? cart : {};
+        this.cart.items = cart ? cart.items : [];
         this._id = id;
     }
 
@@ -19,6 +21,37 @@ class User{
             })
     }
 
+    getCart(){
+        return this.cart.items;
+    }
+
+    addToCart(product){
+        const index = this.cart.items.findIndex( cp => {
+            return cp.productId.toString() === product._id.toString();
+        })
+        const updatedCartItems = [...this.cart.items];
+        let itemQuantity = 1;
+        // cart da zaten eklenmek istenen ürün var mı? varsa quantity arttırılacak
+        if (index >= 0){
+            itemQuantity = this.cart.items[index].quantity + 1;
+            updatedCartItems[index].quantity = itemQuantity;
+        }else{  // yoksa yeni bir ürün eklenecek
+            updatedCartItems.push({
+                productId: new mongodb.ObjectId(product._id),
+                quantity: itemQuantity
+            })
+        }
+
+        const db = getdb();
+        return db.collection('users')
+            .updateOne(
+                { _id: new mongodb.ObjectId(this._id) },
+                { $set: { cart: { items: updatedCartItems } } }
+            )
+            .then()
+            .catch(err => console.log(err))
+    }
+
     static findById(userid){
         const db = getdb();
         return db.collection('users')
@@ -30,7 +63,6 @@ class User{
             })
     }
 
-
     static findByUserName(username){
         const db = getdb();
         return db.collection('users')
@@ -41,6 +73,5 @@ class User{
                 console.log(err);
             })
     }
-
 }
 module.exports = User;
