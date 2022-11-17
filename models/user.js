@@ -1,3 +1,4 @@
+const Product = require('./product');
 const mongoose = require('mongoose');
 const userSchema = mongoose.Schema({
     name: {
@@ -43,6 +44,32 @@ userSchema.methods.addToCart = function(product){
         items: updatedCartItems
     }
     return this.save();
+}
+
+userSchema.methods.getCart = function(){
+    const ids = this.cart.items.map( i => {
+        return i.productId;
+    })
+    return Product
+        .find({
+            _id: { $in: ids}
+        })
+        .select('name price imageUrl')
+        .then(products => {
+            return products.map(p => {
+                return {
+                    name: p.name,
+                    price: p.price,
+                    imageUrl: p.imageUrl,
+                    quantity: this.cart.items.find(i => {
+                        return i.productId.toString() === p._id.toString();
+                    }).quantity
+                }
+            })
+        }).catch(err => {
+            console.log(err);
+        })
+    console.log(ids);
 }
 
 module.exports = mongoose.model('User', userSchema);

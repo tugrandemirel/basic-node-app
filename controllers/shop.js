@@ -116,12 +116,14 @@ module.exports.getProduct = (req, res, next) =>{
 
 module.exports.getCart = (req, res, next) =>{
 
-    req.user.getCart()
-        .then((products) => {
-            console.log(products)
+    req.user
+        .populate('cart.items.productId')
+        .execPopulate()
+        .then((user) => {
+            console.log(user.cart.items)
             res.render('shop/cart', {
                 title: 'Cart',
-                products: products,
+                products: user.cart.items,
                 path: '/cart'
             })
         }).catch(err =>{
