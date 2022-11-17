@@ -116,7 +116,7 @@ exports.postDeleteProduct = (req, res, next) => {
 }
 
 exports.getCategories = (req, res, next) => {
-    Category.findAll()
+    Category.find()
         .then(categories => {
             res.render('admin/categories', {
                 title: 'Admin Categories',
@@ -137,7 +137,10 @@ exports.getAddCategory = (req, res, next) => {
 exports.postAddCategory = (req, res, next) => {
     const name = req.body.name;
     const description = req.body.description;
-    const category = new Category(name, description, null)
+    const category = new Category({
+        name: name,
+        description: description
+    })
     category.save()
         .then(() => {
             res.redirect('/admin/categories?action=create');
@@ -169,24 +172,24 @@ exports.postEditCategories = (req, res, next) => {
     const categoryid = req.body.categoryid;
     const name = req.body.name;
     const description = req.body.description;
-    const category = new Category(name, description, categoryid)
-    category.save()
-        .then(() => {
-            console.log('Category has been updated')
+    Category.findById(categoryid)
+        .then((category) => {
+            category.name = name;
+            category.description = description;
+            return category.save();
+        }).then(() => {
             res.redirect('/admin/categories?action=edit');
         })
         .catch((err) => {console.log(err);})
-
 }
 
 exports.postDeleteCategory = (req, res, next) => {
     const categoryid = req.body.categoryid;
     console.log(categoryid)
-    Category.deleteById(categoryid)
+    Category.findByIdAndRemove(categoryid)
         .then(() => {
             console.log('Category has been deleted')
             res.redirect('/admin/categories?action=delete');
         })
         .catch((err) => {console.log(err);})
-
 }

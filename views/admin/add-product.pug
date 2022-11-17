@@ -10,14 +10,14 @@ block content
             label( for="price").col-sm-2.col-form-label Price
             div.col-md-10
                 input( type="text"  name="price")#price.form-control
-        //
-        //div.form-group.row
-        //    label( for="categoryid").col-sm-2.col-form-label Selected Category
-        //    div.col-md-10
-        //        select( name="categoryid")#categoryid.form-control
-        //            option(value="-1") Select Category
-        //            each category in categories
-        //                option(value=`${category.id}`) #{category.name}
+
+        div.form-group.row
+            label( for="categoryid").col-sm-2.col-form-label Selected Category
+            div.col-md-10
+                select( name="categoryid")#categoryid.form-control
+                    option(value="-1") Select Category
+                    each category in categories
+                        option(value=`${category.id}`) #{category.name}
 
         div.form-group.row
             label( for="description").col-sm-2.col-form-label Description
