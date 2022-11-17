@@ -11,6 +11,7 @@ app.set('views', 'views');
 // Routes
 const adminRoutes = require('./routes/admin');
 const userRoutes = require('./routes/shop');
+const accountRoutes = require('./routes/account');
 const mongoose = require('mongoose');
 //Controllers
 const errorController = require('./controllers/errors')
@@ -35,6 +36,7 @@ app.use((req, res, next) => {
 // routes
 app.use('/admin', adminRoutes);
 app.use(userRoutes);
+app.use(accountRoutes);
 app.use(errorController.get404Page)
 
 const url = 'mongodb+srv://tugran:1289558T.d@cluster0.qfo1war.mongodb.net/node-app?retryWrites=true&w=majority'

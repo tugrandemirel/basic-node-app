@@ -1,0 +1,16 @@
+extends ../layouts/main-layout.pug
+block content
+    form(action="/login" method="post")
+        div.form-group.row
+            label( for="email").col-sm-2.col-form-label Email
+            div.col-md-10
+                input( type="text"  name="email")#email.form-control
+
+        div.form-group.row
+            label( for="password").col-sm-2.col-form-label Password
+            div.col-md-10
+                input( type="text"  name="password")#password.form-control
+
+        div.form-group.row
+            div.col-md-10.offset-sm-2
+                input(type="submit" value="Save Category").btn.btn-primary
