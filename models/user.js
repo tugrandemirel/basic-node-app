@@ -112,5 +112,49 @@ class User{
                 }
             )
     }
+
+    addOrder(){
+        // kullanıcı cart üzerindeki ürünleri yakala
+        // order tablosuna yeni bir kayıt ekle
+        // cartı temizle
+        const db = getdb();
+        return this.getCart()
+            .then(products => {
+                const order = {
+                    items: products.map( item => {
+                        return {
+                            _id: item.id,
+                            name: item.name,
+                            price: item.price,
+                            imageUrl: item.imageUrl,
+                            userId: item.userId,
+                            quantity: item.quantity
+                        }
+                    } ),
+                    user: {
+                        _id: new mongodb.ObjectId(this._id),
+                        name: this.name,
+                        email: this.email
+                    },
+                    date: new Date().toLocaleString()
+                }
+
+                db.collection('orders')
+                    .insertOne(order)
+            })
+            .then(() => {
+                this.cart = {
+                    items: []
+                }
+                db.collection('users').updateOne(
+                    { _id: new mongodb.ObjectId(this._id) },
+                    { $set: { cart: { items: [] } } }
+                )
+            })
+    }
+
+    getOrders(){
+
+    }
 }
 module.exports = User;
