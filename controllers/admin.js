@@ -3,9 +3,12 @@ const Category = require('../models/category')
 
 module.exports.getProducts = (req, res, next) =>{
     Product.find()
+        .populate('userId', 'name')
+        .select('name price userId')
         .sort({ date: 1})
         .select({ name:1, price: 1})
         .then(products => {
+            console.log(products)
             res.render('admin/products', {
                 title: 'Admin Products',
                 products: products,
