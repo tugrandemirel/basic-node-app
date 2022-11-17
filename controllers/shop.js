@@ -64,6 +64,8 @@ module.exports.getProductsByCategoryId = (req, res, next) =>{
         .catch(err => {
             console.log(err);
         })
+
+
 }
 
 module.exports.getProduct = (req, res, next) =>{
