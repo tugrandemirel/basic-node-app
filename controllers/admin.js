@@ -48,31 +48,11 @@ exports.postAddProduct = (req, res, next) => {
  exports.getEditProduct = (req, res, next) =>{
     Product.findById(req.params.productid)
         .then((product) => {
-            if (!product) {
-                return res.redirect('back');
-            }else{
-                Category.findAll()
-                    .then(categories => {
-
-                        categories = categories.map(category => {
-                            if(product.categories){
-                                product.categories.find( item => {
-                                    if(item == category._id){
-                                        category.selected = true;
-                                    }
-                                })
-                            }
-                            return category
-                        })
-
-                        res.render('admin/edit-product', {
-                            title: 'Edit Product',
-                            categories: categories,
-                            product: product,
-                            path: '/admin/edit-product'
-                    })
-                }).catch((error) => {console.log(error);})
-            }
+            res.render('admin/edit-product', {
+                title: 'Edit Product',
+                product: product,
+                path: '/admin/edit-product'
+            })
         })
         .catch((err) => {
             console.log(err);
@@ -85,18 +65,38 @@ exports.postEditProduct = (req, res, next) => {
     const name = req.body.name;
     const price = req.body.price;
     const imageUrl = req.body.imageUrl;
-    const categories = req.body.categoryids;
+    // const categories = req.body.categoryids;
     const description = req.body.description;
     // const categoryid = req.body.categoryid;
     // const userid = req.user.id;
-    const product = new Product(name, price, description, imageUrl, categories, id, req.user._id)
-    product.save()
+
+    /*Product.findById(id)
+        .then(product => {
+            product.name = name;
+            product.price = price;
+            product.imageUrl = imageUrl;
+            product.description = description;
+            return product.save();
+        })
         .then(() => {
             res.redirect('/admin/products?action=edit');
         })
-        .catch((err) => {
-            console.log(err);
-        })
+        .catch(err => {
+            console.log(err)
+        })*/
+
+    Product.update({_id: id}, {
+        $set: {
+            name: name,
+            price: price,
+            imageUrl: imageUrl,
+            description: description,
+        }
+    }).then(() => {
+        res.redirect('/admin/products?action=edit');
+    }).catch(err => {
+        console.log(err)
+    })
 }
 
 exports.postDeleteProduct = (req, res, next) => {
