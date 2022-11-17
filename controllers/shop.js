@@ -131,15 +131,14 @@ module.exports.postCartItemDelete = (req, res, next) =>{
 
 module.exports.getOrders = (req, res, next) =>{
 
-
 }
 module.exports.postOrders = (req, res, next) =>{
-   req.user.addOrder()
-       .then(() => {
-              res.redirect('/cart')
-    }).catch( err => {
-         console.log(err);
-   })
+     req.user.addOrder()
+         .then(()=> {
+                res.redirect('/cart')
+         }).catch(err => {
+            console.log(err);
+         })
 }
 
 
