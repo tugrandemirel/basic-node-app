@@ -11,17 +11,16 @@ app.set('views', 'views');
 // Routes
 const adminRoutes = require('./routes/admin');
 const userRoutes = require('./routes/shop');
-
+const mongoose = require('mongoose');
 //Controllers
 const errorController = require('./controllers/errors')
 
-const mongoConnect = require('./utility/database').mongoConnect;
 
 const User = require('./models/user');
 
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.static(path.join(__dirname, 'public')))
-
+/*
 app.use((req, res, next) => {
     User.findByUserName('tugran')
         .then((user) => {
@@ -33,12 +32,12 @@ app.use((req, res, next) => {
             console.log(err);
         })
 })
-
+*/
 // routes
 app.use('/admin', adminRoutes);
 app.use(userRoutes);
 app.use(errorController.get404Page)
-
+/*
 mongoConnect(() => {
     User.findByUserName('tugran')
         .then(user => {
@@ -54,4 +53,12 @@ mongoConnect(() => {
         catch((err) => {
             console.log(err)
         })
+})*/
+
+mongoose.connect('mongodb+srv://tugran:1289558T.d@cluster0.qfo1war.mongodb.net/?retryWrites=true&w=majority')
+.then(() => {
+    console.log('Connected');
+    app.listen(3000);
+}).catch( err => {
+    console.log(err);
 })
