@@ -23,7 +23,7 @@ module.exports.getIndex = (req, res, next) =>{
 }
 
 module.exports.getProducts = (req, res, next) =>{
-    Product.findAll()
+    Product.find()
         .then(products => {
             Category.findAll()
                 .then(categories => {
@@ -143,6 +143,7 @@ module.exports.getOrders = (req, res, next) =>{
         console.log(err);
     })
 }
+
 module.exports.postOrders = (req, res, next) =>{
      req.user.addOrder()
          .then(()=> {
