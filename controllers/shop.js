@@ -130,7 +130,16 @@ module.exports.postCartItemDelete = (req, res, next) =>{
 }
 
 module.exports.getOrders = (req, res, next) =>{
-
+    req.user.getOrders()
+        .then(orders => {
+            res.render('shop/orders', {
+                title: 'Orders',
+                orders: orders,
+                path: '/orders'
+            })
+        }).catch(err => {
+        console.log(err);
+    })
 }
 module.exports.postOrders = (req, res, next) =>{
      req.user.addOrder()
