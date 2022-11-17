@@ -2,9 +2,14 @@ const Product = require('../models/product')
 const Category = require('../models/category')
 
 module.exports.getIndex = (req, res, next) =>{
-    Product.findAll()
+    Product.find()
         .then(products => {
-            Category.findAll()
+            res.render('shop/index', {
+                title: 'Shopping',
+                products: products,
+                path: '/'
+            })
+            /*Category.findAll()
                 .then(categories => {
                     res.render('shop/index', {
                         title: 'Shopping',
@@ -12,7 +17,7 @@ module.exports.getIndex = (req, res, next) =>{
                         categories: categories,
                         path: '/'
                     })
-                })
+                })*/
                 .catch(err => {
                     console.log(err);
                 })
@@ -23,9 +28,36 @@ module.exports.getIndex = (req, res, next) =>{
 }
 
 module.exports.getProducts = (req, res, next) =>{
-    Product.find()
+    // mongoose ile veritabanı işlemleri için kullanilabilecek operatörler
+    // eq = equal => eşit
+    // ne = not equal => eşit değil
+    // gt = greater than => büyük
+    // gte = greater than or equal to => büyük veya eşit
+    // lt = less than => küçük
+    // lte = less than or equal to => küçük veya eşit
+    // in => içinde
+    // nin = not in => içinde değil
+
+    Product
+        .find()
+        // .find({price: {$gt: 10, $lt: 20}})
+        // .find({price: {$in: [10, 20, 30]}})
+        // .find({ price: {$gt: 2000}, name: 'Samsung s6' })
+        // .or([{ price: {$gt: 2000}, name: 'Samsung s6' }])
+        // arama işlemleri için regex kullanımı
+        //start with
+        // .find({ name: /^Samsung/ })
+        //end with
+        // .find({ name: /s6$/ })
+        //contains
+        // .find({ name: /.*s6.*/ })
         .then(products => {
-            Category.findAll()
+            res.render('shop/products', {
+                title: 'Products',
+                products: products,
+                path: '/'
+            })
+            /*Category.findAll()
                 .then(categories => {
                     res.render('shop/products', {
                         title: 'Products',
@@ -36,7 +68,7 @@ module.exports.getProducts = (req, res, next) =>{
                 })
                 .catch(err => {
                     console.log(err);
-                })
+                })*/
 
                 })
         .catch((error) => {
