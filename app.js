@@ -54,8 +54,8 @@ mongoConnect(() => {
             console.log(err)
         })
 })*/
-
-mongoose.connect('mongodb+srv://tugran:1289558T.d@cluster0.qfo1war.mongodb.net/?retryWrites=true&w=majority')
+const url = 'mongodb+srv://tugran:1289558T.d@cluster0.qfo1war.mongodb.net/node-app?retryWrites=true&w=majority'
+mongoose.connect(url)
 .then(() => {
     console.log('Connected');
     app.listen(3000);
