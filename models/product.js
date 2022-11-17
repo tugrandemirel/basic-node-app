@@ -1,3 +1,26 @@
+const mongoose = require('mongoose');
+
+const productSchema = mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    price: {
+        type: Number,
+        required: true
+    },
+    description: String,
+    imageUrl: String,
+    date: {
+        type: Date,
+        default: Date.now
+    }
+});
+
+
+module.exports = mongoose.model('Product', productSchema);
+
+/*
 const getdb = require('../utility/database').getdb;
 const mongodb = require('mongodb');
 class Product{
@@ -43,14 +66,14 @@ class Product{
     static findById(id){
         const productId = new mongodb.ObjectId(id);
         const db =getdb();
-        /*return db.collection('products')
+        /!*return db.collection('products')
             .find({_id: productId})
             .toArray()
             .then(product => {
                 return product;
             }).catch(err => {
                 console.log(err);
-            })*/
+            })*!/
         return db.collection('products')
             .findOne({_id: productId})
             .then(product => {
@@ -87,4 +110,4 @@ class Product{
 }
 
 
-module.exports = Product;
+module.exports = Product;*/
