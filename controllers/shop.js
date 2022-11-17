@@ -194,8 +194,8 @@ module.exports.postOrders = (req, res, next) =>{
             })
             return order.save()
         }).then(() => {
-
-    })
+            return req.user.clearCart() // clear cart
+        })
         .then(() => {
             res.redirect('/cart')
         }).catch(err => {
