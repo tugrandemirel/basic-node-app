@@ -13,20 +13,20 @@ block content
                             th(style="width:150px;") Price
                             th(style="width:150px;") Quantity
                     tbody
-                        each product in order.items
+                        each item in order.items
                             tr
                                 td
-                                    img(src=`/img/${product.imageUrl}`, width="80")
-                                td #{product.name}
-                                td #{product.price} TL
-                                td #{product.quantity}
+                                    img(src=`/img/${item.product.imageUrl}`, width="80")
+                                td #{item.product.name}
+                                td #{item.product.price} TL
+                                td #{item.quantity}
                     tfoot
                         tr
                             td(colspan="2") #{order.date}
                             td
                             - var total = 0
-                            each product in order.items
-                                - total += product.price * product.quantity
+                            each item in order.items
+                                - total += item.product.price * item.quantity
                             td #{total} TL
 
     else
