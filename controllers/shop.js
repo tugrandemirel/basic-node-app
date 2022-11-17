@@ -4,12 +4,10 @@ const Category = require('../models/category')
 module.exports.getIndex = (req, res, next) =>{
     Product.find()
         .then(products => {
-            res.render('shop/index', {
-                title: 'Shopping',
-                products: products,
-                path: '/'
-            })
-            /*Category.findAll()
+            return products;
+        })
+        .then(products => {
+            Category.find()
                 .then(categories => {
                     res.render('shop/index', {
                         title: 'Shopping',
@@ -17,12 +15,9 @@ module.exports.getIndex = (req, res, next) =>{
                         categories: categories,
                         path: '/'
                     })
-                })*/
-                .catch(err => {
-                    console.log(err);
                 })
-
-        }).catch(err => {
+        })
+        .catch(err => {
             console.log(err);
     })
 }
@@ -52,12 +47,10 @@ module.exports.getProducts = (req, res, next) =>{
         //contains
         // .find({ name: /.*s6.*/ })
         .then(products => {
-            res.render('shop/products', {
-                title: 'Products',
-                products: products,
-                path: '/'
-            })
-            /*Category.findAll()
+            return products;
+        })
+        .then( products =>{
+            Category.find()
                 .then(categories => {
                     res.render('shop/products', {
                         title: 'Products',
@@ -68,9 +61,8 @@ module.exports.getProducts = (req, res, next) =>{
                 })
                 .catch(err => {
                     console.log(err);
-                })*/
-
                 })
+        })
         .catch((error) => {
             console.log(error);
         });
@@ -79,10 +71,10 @@ module.exports.getProducts = (req, res, next) =>{
 module.exports.getProductsByCategoryId = (req, res, next) =>{
     const categoryid = req.params.categoryid;
     const model = [];
-    Category.findAll()
+    Category.find()
         .then((categories) => {
             model.categories = categories;
-            return Product.findByCategoryId(categoryid)
+            return Product.find({ categories: categoryid })
         })
         .then((products) =>{
             res.render('shop/products', {
@@ -96,8 +88,6 @@ module.exports.getProductsByCategoryId = (req, res, next) =>{
         .catch(err => {
             console.log(err);
         })
-
-
 }
 
 module.exports.getProduct = (req, res, next) =>{
