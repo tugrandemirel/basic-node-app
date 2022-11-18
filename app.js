@@ -62,6 +62,7 @@ app.use((req, res, next) => {
 app.use('/admin', adminRoutes);
 app.use(userRoutes);
 app.use(accountRoutes);
+app.use('/500', errorController.get500Page)
 app.use(errorController.get404Page)
 
 mongoose.connect(url)
