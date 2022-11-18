@@ -27,8 +27,10 @@ exports.postLogin = (req, res, next) => {
                         // session'a kaydedilen kullanıcı bilgileri
                         req.session.user = user;
                         return req.session.save(function (err) {
-                            console.log(err);
-                            res.redirect('/');
+                            var redirectTo = req.session.redirectTo ? req.session.redirectTo : '/';
+                            // session'dan redirect url silinir
+                            delete req.session.redirectTo;
+                            res.redirect(redirectTo);
                         })
                     }else{
                         // not login
