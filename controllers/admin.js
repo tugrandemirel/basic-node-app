@@ -13,7 +13,6 @@ module.exports.getProducts = (req, res, next) =>{
                 title: 'Admin Products',
                 products: products,
                 path: '/admin/products',
-                isAuthenticated: req.session.isAuthentication,
                 action: req.query.action
             })
         }).catch((error) => {
@@ -27,7 +26,6 @@ module.exports.getProducts = (req, res, next) =>{
             res.render('admin/add-product', {
                 title: 'Add a new product',
                 categories: categories,
-                isAuthenticated: req.session.isAuthentication,
                 path: '/admin/add-product'
             });
         })
@@ -80,7 +78,6 @@ exports.postAddProduct = (req, res, next) => {
                         title: 'Edit Product',
                         product: product,
                         categories: categories,
-                        isAuthenticated: req.session.isAuthentication,
                         path: '/admin/edit-product'
                     })
                 })
@@ -133,7 +130,6 @@ exports.getCategories = (req, res, next) => {
                 title: 'Admin Categories',
                 categories: categories,
                 path: '/admin/categories',
-                isAuthenticated: req.session.isAuthentication,
                 action: req.query.action
         })
         }).catch((error) => {console.log(error);})
@@ -142,7 +138,6 @@ exports.getCategories = (req, res, next) => {
 exports.getAddCategory = (req, res, next) => {
     res.render('admin/add-category', {
         title: 'Add a new category',
-        isAuthenticated: req.session.isAuthentication,
         path: '/admin/add-category'
     });
 }
@@ -172,7 +167,6 @@ exports.getEditCategory = (req, res, next) => {
                 res.render('admin/edit-category', {
                     title: 'Edit Category',
                     category: category,
-                    isAuthenticated: req.session.isAuthentication,
                     path: '/admin/edit-category'
                 })
             }

@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router();
 const productsController = require('../controllers/admin')
 const isAuthenticated = require('../middleware/authentication')
+const csrf = require('../middleware/csrf')
+
 router.get('/products', productsController.getProducts)
 
 // path, middleware, controller
@@ -14,23 +16,23 @@ router.get('/add-product', (req, res, next) => {
     next();
 } ,productsController.getAddProduct)
 */
-router.get('/add-product', isAuthenticated, productsController.getAddProduct)
+router.get('/add-product', isAuthenticated, csrf, productsController.getAddProduct)
 router.post('/add-product', isAuthenticated, productsController.postAddProduct);
 
-router.get('/products/:productid', productsController.getEditProduct)
-router.post('/products', productsController.postEditProduct);
+router.get('/products/:productid', isAuthenticated, csrf, productsController.getEditProduct)
+router.post('/products', isAuthenticated, csrf, productsController.postEditProduct);
 
-router.post('/delete-product', productsController.postDeleteProduct);
+router.post('/delete-product', isAuthenticated, csrf, productsController.postDeleteProduct);
 
 
-router.get('/categories', productsController.getCategories)
+router.get('/categories', isAuthenticated, csrf, productsController.getCategories)
 
-router.get('/add-category', productsController.getAddCategory)
-router.post('/add-category', productsController.postAddCategory)
+router.get('/add-category', isAuthenticated, csrf, productsController.getAddCategory)
+router.post('/add-category', isAuthenticated, productsController.postAddCategory)
 
-router.get('/categories/:categoryid', productsController.getEditCategory)
-router.post('/categories', productsController.postEditCategories);
+router.get('/categories/:categoryid', isAuthenticated, csrf, productsController.getEditCategory)
+router.post('/categories', isAuthenticated, csrf, productsController.postEditCategories);
 
-router.post('/delete-category', productsController.postDeleteCategory);
+router.post('/delete-category', isAuthenticated, csrf, productsController.postDeleteCategory);
 
 module.exports = router;

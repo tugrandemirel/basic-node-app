@@ -16,7 +16,7 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
-
+const csurf = require('csurf');
 //Controllers
 const errorController = require('./controllers/errors')
 
@@ -40,6 +40,8 @@ app.use(session({
     },
     store: store
 }))
+app.use(csurf())
+
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use((req, res, next) => {
