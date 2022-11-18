@@ -13,6 +13,10 @@ router.get('/reset-password', csrf, accountController.getReset);
 router.post('/reset-password', csrf, accountController.postReset);
 
 
+router.post('/reset-password/:token', csrf, accountController.getNewPassword);
+router.post('/new-password', csrf, accountController.postNewPassword);
+
+
 router.get('/logout', csrf, accountController.getLogout);
 
 module.exports = router;
