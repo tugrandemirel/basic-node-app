@@ -16,7 +16,7 @@ module.exports.getProducts = (req, res, next) =>{
                 action: req.query.action
             })
         }).catch((error) => {
-            res.redirect('/500')
+           next(error);
         });
  }
 
@@ -30,7 +30,7 @@ module.exports.getProducts = (req, res, next) =>{
             });
         })
         .catch(err => {
-            res.redirect('/500')
+           next(err)
         })
 }
 
@@ -190,7 +190,7 @@ exports.getCategories = (req, res, next) => {
                 action: req.query.action
         })
         }).catch((error) => {
-        next(err);
+        next(error);
         })
 }
 
@@ -212,7 +212,7 @@ exports.postAddCategory = (req, res, next) => {
         .then(() => {
             res.redirect('/admin/categories?action=create');
         }).catch((err) => {
-            console.log(err);
+        next(err)
     })
 }
 
@@ -247,7 +247,9 @@ exports.postEditCategories = (req, res, next) => {
         }).then(() => {
             res.redirect('/admin/categories?action=edit');
         })
-        .catch((err) => {console.log(err);})
+        .catch((err) => {
+            next(err)
+        })
 }
 
 exports.postDeleteCategory = (req, res, next) => {

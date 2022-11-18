@@ -1,7 +1,7 @@
 extends ../layouts/main-layout.pug
 block content
     if errorMessage
-        div.alert.alert-danger.text-center #{errorMessage}
+        div.alert.alert-danger.text-center !{errorMessage}
     form(action="/register" method="post")
         input(type="hidden" name="_csrf" value=`${csrfToken}`)
         div.form-group.row

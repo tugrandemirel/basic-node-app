@@ -27,7 +27,6 @@ exports.postLogin = (req, res, next) => {
                     if(!user){
                         req.session.errorMessage = 'Bu mail adresi ile bir kullanıcı bulunamadı';
                         req.session.save(function (err) {
-                            console.log(err);
                             return res.redirect('/login');
                         })
                     }
@@ -50,7 +49,6 @@ exports.postLogin = (req, res, next) => {
                                 // not login
                                 req.session.errorMessage = 'Şifre ya da email adresi hatalı';
                                 req.session.save(function (err) {
-                                    console.log(err);
                                     return res.redirect('/login');
                                 })
                             }
@@ -75,6 +73,8 @@ exports.postLogin = (req, res, next) => {
                     errorMessage: message,
                     csrfToken: req.csrfToken()
                 })
+            }else {
+                next(err);
             }
         })
 }
@@ -101,14 +101,12 @@ exports.postRegister = (req, res, next) => {
             if (user){
                 req.session.errorMessage = 'Bu mail adresine ait farklı bir kullanıcı bulunmaktadır';
                 req.session.save(function (err) {
-                    console.log(err);
                     return res.redirect('/register');
                 })
             }
             else{
                 return bcrypt.hash(password, 12)
                     .then(hashedPassword => {
-                        console.log(hashedPassword);
                         const newUser = new User({
                             name: name,
                             email: email,
@@ -123,7 +121,20 @@ exports.postRegister = (req, res, next) => {
             res.redirect('/login');
         })
         .catch(err => {
-            console.log(err);
+            if (err.name === 'ValidationError') {
+                var message = '';
+                for (field in err.errors) {
+                    message += err.errors[field].message + '<br>';
+                }
+                res.render('account/register', {
+                    path: '/register',
+                    title: 'Register',
+                    errorMessage: message,
+                    csrfToken: req.csrfToken()
+                })
+            }else {
+                next(err);
+            }
         })
 }
 
@@ -142,7 +153,6 @@ exports.postReset = (req, res, next) => {
     const email = req.body.email;
     crypto.randomBytes(32, (err, buffer) => {
         if(err){
-            console.log(err);
             return res.redirect('/reset-password');
         }
         const token = buffer.toString('hex');
@@ -152,7 +162,6 @@ exports.postReset = (req, res, next) => {
                 if(!user){
                     req.session.errorMessage = 'Bu mail adresi ile bir kullanıcı bulunamadı';
                     req.session.save(function (err) {
-                        console.log(err);
                         return res.redirect('/reset-password');
                     })
                 }
@@ -177,7 +186,7 @@ exports.postReset = (req, res, next) => {
                 }
             })
             .catch(err => {
-                console.log(err);
+                next(err)
             })
     })
 }
@@ -185,7 +194,6 @@ exports.postReset = (req, res, next) => {
 exports.getLogout = (req, res, next) => {
     // session'dan kullanıcı bilgileri silinir ve kullanıcı çıkış yapar
     req.session.destroy(err => {
-            console.log(err);
             res.redirect('/');
         })
 }
@@ -208,7 +216,7 @@ exports.getNewPassword = (req, res, next) => {
             })
         })
         .catch(err => {
-            console.log(err)
+            next(err)
         })
 }
 
@@ -239,6 +247,6 @@ exports.postNewPassword = (req, res, next) => {
                 })
         })
         .catch(err => {
-            console.log(err)
+            next(err)
         })
 }
