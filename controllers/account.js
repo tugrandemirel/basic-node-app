@@ -1,9 +1,12 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 exports.getLogin = (req, res, next) => {
+    var errorMessage = req.session.errorMessage;
+    delete req.session.errorMessage;
     res.render('account/login', {
         path: '/login',
-        title: 'Login'
+        title: 'Login',
+        errorMessage: errorMessage
     })
 }
 
@@ -14,7 +17,11 @@ exports.postLogin = (req, res, next) => {
     User.findOne({ email: email })
         .then(user => {
             if(!user){
-                return res.redirect('/login');
+                req.session.errorMessage = 'Bu mail adresi ile bir kullanıcı bulunamadı';
+                req.session.save(function (err) {
+                    console.log(err);
+                    return res.redirect('/login');
+                })
             }
             // hashalenmiş passwrod ile kullanıcıdan gelen password karşılaştırması
             bcrypt.compare(password, user.password)
@@ -33,7 +40,11 @@ exports.postLogin = (req, res, next) => {
                         })
                     }else{
                         // not login
-                        res.redirect('/login');
+                        req.session.errorMessage = 'Şifre hatalı';
+                        req.session.save(function (err) {
+                            console.log(err);
+                            return res.redirect('/login');
+                        })
                     }
                 })
                 .catch(err => {
@@ -59,9 +70,12 @@ exports.postLogin = (req, res, next) => {
 }
 
 exports.getRegister = (req, res, next) => {
+    var errorMessage = req.session.errorMessage;
+    delete req.session.errorMessage;
     res.render('account/register', {
         path: '/register',
-        title: 'register'
+        title: 'register',
+        errorMessage: errorMessage
     })
 }
 
@@ -75,7 +89,11 @@ exports.postRegister = (req, res, next) => {
     })
         .then(user => {
             if (user){
-                return res.redirect('/register');
+                req.session.errorMessage = 'Bu mail adresine ait farklı bir kullanıcı bulunmaktadır';
+                req.session.save(function (err) {
+                    console.log(err);
+                    return res.redirect('/register');
+                })
             }
             else{
                 return bcrypt.hash(password, 12)
@@ -92,9 +110,9 @@ exports.postRegister = (req, res, next) => {
             }
         })
         .then(() => {
-        res.redirect('/login');
+            res.redirect('/login');
         })
-            .catch(err => {
+        .catch(err => {
             console.log(err);
         })
 }

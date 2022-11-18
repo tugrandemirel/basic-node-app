@@ -1,5 +1,7 @@
 extends ../layouts/main-layout.pug
 block content
+    if errorMessage
+        div.alert.alert-danger.text-center #{errorMessage}
     form(action="/login" method="post")
         input(type="hidden" name="_csrf" value=`${csrfToken}`)
         div.form-group.row
@@ -14,4 +16,4 @@ block content
 
         div.form-group.row
             div.col-md-10.offset-sm-2
-                input(type="submit" value="Save Category").btn.btn-primary
+                input(type="submit" value="Login").btn.btn-primary
