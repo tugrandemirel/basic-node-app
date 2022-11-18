@@ -15,7 +15,7 @@ router.get('/add-product', (req, res, next) => {
 } ,productsController.getAddProduct)
 */
 router.get('/add-product', isAuthenticated, productsController.getAddProduct)
-router.post('/add-product', productsController.postAddProduct);
+router.post('/add-product', isAuthenticated, productsController.postAddProduct);
 
 router.get('/products/:productid', productsController.getEditProduct)
 router.post('/products', productsController.postEditProduct);
