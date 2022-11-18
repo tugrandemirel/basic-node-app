@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 exports.getLogin = (req, res, next) => {
     var errorMessage = req.session.errorMessage;
     delete req.session.errorMessage;
@@ -118,14 +119,58 @@ exports.postRegister = (req, res, next) => {
 }
 
 exports.getReset = (req, res, next) => {
+
+    var errorMessage = req.session.errorMessage;
+    delete req.session.errorMessage;
     res.render('account/reset', {
-        path: '/reset',
-        title: 'reset'
+        path: '/reset-password',
+        title: 'Reset Password',
+        errorMessage: errorMessage
     })
 }
 
 exports.postReset = (req, res, next) => {
-    res.redirect('/login');
+    const email = req.body.email;
+    crypto.randomBytes(32, (err, buffer) => {
+        if(err){
+            console.log(err);
+            return res.redirect('/reset-password');
+        }
+        const token = buffer.toString('hex');
+
+        User.findOne({ email: email})
+            .then(user => {
+                if(!user){
+                    req.session.errorMessage = 'Bu mail adresi ile bir kullanıcı bulunamadı';
+                    req.session.save(function (err) {
+                        console.log(err);
+                        return res.redirect('/reset-password');
+                    })
+                }
+                user.resetToken = token;
+                user.resetTokenExpiration = Date.now() + 1000*60*60;
+
+                return user.save();
+            })
+            .then(result => {
+                res.redirect('/');
+                // mail gönderme işlemi
+                const  msg = {
+                    // kime gidecek
+                    to: email,
+                    // kimden geldi
+                    from: 'demireltugran66@gmail.com',
+                    subject: 'Password Reset',
+                    html: `
+                            <h1>Şifre sıfırlama isteği</h1>
+                            <p>Şifrenizi sıfırlamak için <a href="http://localhost:3000/reset-password/${token}">tıklayınız</a></p>
+                        `,
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    })
 }
 
 exports.getLogout = (req, res, next) => {
