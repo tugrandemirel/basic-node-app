@@ -1,10 +1,13 @@
 extends ../layouts/main-layout.pug
 block content
-    form(action="/reset" method="post")
+    if errorMessage
+        div.alert.alert-danger.text-center #{errorMessage}
+    form(action="/reset-password" method="post")
+        input(type="hidden" name="_csrf" value=`${csrfToken}`)
         div.form-group.row
             label( for="email").col-sm-2.col-form-label Email
             div.col-md-10
                 input( type="text"  name="email")#email.form-control
         div.form-group.row
             div.col-md-10.offset-sm-2
-                input(type="submit" value="Save Category").btn.btn-primary
+                input(type="submit" value="Reset Password").btn.btn-primary

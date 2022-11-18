@@ -13,6 +13,12 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    resetToken: String,
+    resetTokenExpiration: Date,
+    isAdmin:{
+        type: Boolean,
+        default: false
+    },
     cart: {
         items: [{
             productId: {
