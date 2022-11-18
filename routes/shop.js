@@ -10,9 +10,9 @@ router.get('/product/:productid', shopController.getProduct)
 router.get('/categories/:categoryid', shopController.getProductsByCategoryId)
 router.get('/cart', isAuthenticated, shopController.getCart)
 router.post('/cart', isAuthenticated, shopController.postCart)
-router.post('/delete-cartitem', shopController.postCartItemDelete)
-router.get('/orders', shopController.getOrders)
-router.post('/create-order', shopController.postOrders)
+router.post('/delete-cartitem', isAuthenticated, shopController.postCartItemDelete)
+router.get('/orders', isAuthenticated, shopController.getOrders)
+router.post('/create-order', isAuthenticated, shopController.postOrders)
 
 
 module.exports = router;
