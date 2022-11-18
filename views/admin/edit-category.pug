@@ -1,6 +1,7 @@
 extends ../layouts/main-layout.pug
 block content
     form(action="/admin/categories" method="post")
+        input(type="hidden" name="_csrf" value=`${csrfToken}`)
         div.form-group.row
             label( for="name").col-sm-2.col-form-label Category Name
             div.col-md-10
