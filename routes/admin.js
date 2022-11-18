@@ -1,10 +1,20 @@
 const express = require('express')
 const router = express.Router();
 const productsController = require('../controllers/admin')
-
+const isAuthenticated = require('../middleware/authentication')
 router.get('/products', productsController.getProducts)
 
-router.get('/add-product', productsController.getAddProduct)
+// path, middleware, controller
+/*
+
+router.get('/add-product', (req, res, next) => {
+    if (!req.session.isAuthentication) {
+        return res.redirect('/login');
+    }
+    next();
+} ,productsController.getAddProduct)
+*/
+router.get('/add-product', isAuthenticated, productsController.getAddProduct)
 router.post('/add-product', productsController.postAddProduct);
 
 router.get('/products/:productid', productsController.getEditProduct)
