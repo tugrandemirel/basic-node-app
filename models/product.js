@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const productSchema = mongoose.Schema({
     name: {
         type: String,
-        required: [true, 'Ürün ismi girmelisiniz.']
+        required: [true, 'Ürün ismi girmelisiniz.'],
+        trim: true
     },
     price: {
         type: Number,
@@ -13,7 +14,8 @@ const productSchema = mongoose.Schema({
     },
     description: {
         type: String,
-        maxlength: 2000
+        maxlength: 2000,
+        trim: true
     },
     imageUrl: String,
     date: {
