@@ -11,8 +11,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "body-parser": "^1.18.3",
+    "connect-mongodb-session": "^2.1.1",
+    "cookie-parser": "^1.4.4",
     "express": "^4.16.4",
+    "express-session": "^1.15.6",
     "mongodb": "^3.1.13",
     "mongoose": "^5.4.16",
     "pug": "^2.0.3"

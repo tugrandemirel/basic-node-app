@@ -13,17 +13,40 @@ const adminRoutes = require('./routes/admin');
 const userRoutes = require('./routes/shop');
 const accountRoutes = require('./routes/account');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
+
 //Controllers
 const errorController = require('./controllers/errors')
 
 
 const User = require('./models/user');
 
+const url = 'mongodb+srv://tugran:1289558T.d@cluster0.qfo1war.mongodb.net/node-app?retryWrites=true&w=majority'
+
+const store = new MongoDBStore({
+    uri: url,
+    collection: 'mySessions'
+})
 app.use(bodyParser.urlencoded({extended: false}))
+app.use(cookieParser())
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 1000 * 60 * 60
+    },
+    store: store
+}))
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use((req, res, next) => {
-    User.findOne({name: 'tugran'})
+    if (!req.session.user) {
+        return next()
+    }
+    User.findById(req.session.user._id)
         .then(user => {
             req.user = user;
             next();
@@ -39,31 +62,10 @@ app.use(userRoutes);
 app.use(accountRoutes);
 app.use(errorController.get404Page)
 
-const url = 'mongodb+srv://tugran:1289558T.d@cluster0.qfo1war.mongodb.net/node-app?retryWrites=true&w=majority'
 mongoose.connect(url)
 .then(() => {
     console.log('Connected');
-    User.findOne({name: 'tugran'})
-        .then((user) => {
-            if (!user){
-                const user = new User({
-                    name: 'tugran',
-                    email: 'demireltugran66@gmail.com',
-                    cart: {
-                        items: []
-                    }
-                })
-                return user.save();
-            }
-            return user;
-        })
-        .then(user => {
-            console.log(user);
-            app.listen(3000);
-        })
-        .catch(err => {
-            console.log(err);
-        })
+    app.listen(3000);
 
 }).catch( err => {
     console.log(err);
