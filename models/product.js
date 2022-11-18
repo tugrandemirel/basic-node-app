@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const productSchema = mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: [true, 'Ürün ismi girmelisiniz.']
     },
     price: {
         type: Number,
@@ -30,7 +30,7 @@ const productSchema = mongoose.Schema({
             validator: function (v) {
                 return v && v.length > 0;
             },
-            message: 'A product should have at least one tag.'
+            message: 'En az bir tane ürün etiketi giriniz.'
         }
     },
     isActive: {

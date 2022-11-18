@@ -50,6 +50,24 @@ exports.postAddProduct = (req, res, next) => {
             res.redirect('/admin/products');
         }).catch((err) => {
             console.log(err);
+        if (err.name === 'ValidationError'){
+            var message = '';
+            for(field in err.errors){
+                message += err.errors[field].message + '<br>';
+            }
+        }
+        res.render('admin/add-product', {
+            title: 'Add a new product',
+            path: '/admin/add-product',
+            errorMessage: message,
+            csrfToken: req.csrfToken(),
+            inputs: {
+                name: name,
+                price: price,
+                description: description,
+                imageUrl: imageUrl
+            }
+        })
     })
 }
 
