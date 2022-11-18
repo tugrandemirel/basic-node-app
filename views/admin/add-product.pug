@@ -17,7 +17,7 @@ block content
                 select( name="categoryid")#categoryid.form-control
                     option(value="-1") Select Category
                     each category in categories
-                        option(value=`${category.id}`) #{category.name}
+                        option(value=`${category._id}`) #{category.name}
 
         div.form-group.row
             label( for="description").col-sm-2.col-form-label Description
