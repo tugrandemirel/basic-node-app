@@ -3,13 +3,20 @@ const mongoose = require('mongoose');
 const productSchema = mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: [true, 'Ürün ismi girmelisiniz.'],
+        trim: true
     },
     price: {
         type: Number,
-        required: true
+        required: function () {
+            return this.isActive
+        }
     },
-    description: String,
+    description: {
+        type: String,
+        maxlength: 2000,
+        trim: true
+    },
     imageUrl: String,
     date: {
         type: Date,
@@ -18,6 +25,18 @@ const productSchema = mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+    },
+    tags: {
+        type: Array,
+        validate: {
+            validator: function (v) {
+                return v && v.length > 0;
+            },
+            message: 'En az bir tane ürün etiketi giriniz.'
+        }
+    },
+    isActive: {
+        type: Boolean,
     },
     categories: [{
         type: mongoose.Schema.Types.ObjectId,

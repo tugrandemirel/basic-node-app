@@ -19,7 +19,7 @@ module.exports.getIndex = (req, res, next) =>{
                 })
         })
         .catch(err => {
-            console.log(err);
+            next(err)
     })
 }
 
@@ -65,7 +65,7 @@ module.exports.getProducts = (req, res, next) =>{
                 })
         })
         .catch((error) => {
-            console.log(error);
+            next(error)
         });
 }
 
@@ -101,7 +101,7 @@ module.exports.getProduct = (req, res, next) =>{
                     path: '/products'
                 })
         }).catch(err => {
-            console.log(err);
+        next(err)
     })
    /*const productId = req.params.productid;
    Product.findByPk((productId)).then((product) =>{
@@ -128,7 +128,7 @@ module.exports.getCart = (req, res, next) =>{
                 path: '/cart'
             })
         }).catch(err =>{
-            console.log(err);
+        next(err)
         })
 }
 
@@ -168,7 +168,7 @@ module.exports.getOrders = (req, res, next) =>{
                 path: '/orders'
             })
         }).catch(err => {
-        console.log(err);
+        next(err)
     })
 }
 
@@ -202,7 +202,7 @@ module.exports.postOrders = (req, res, next) =>{
         .then(() => {
             res.redirect('/orders')
         }).catch(err => {
-            console.log(err);
+        next(err)
         })
 }
 

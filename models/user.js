@@ -1,5 +1,6 @@
 const Product = require('./product');
 const mongoose = require('mongoose');
+const {isEmail} = require('validator');
 const userSchema = mongoose.Schema({
     name: {
         type: String,
@@ -7,7 +8,7 @@ const userSchema = mongoose.Schema({
     },
     email: {
         type: String,
-        required: true
+        validate: [isEmail, 'Please enter a valid email'],
     },
     password: {
         type: String,

@@ -4,7 +4,7 @@ const productsController = require('../controllers/admin')
 const isAdmin = require('../middleware/isAdmin')
 const locals = require('../middleware/locals')
 
-router.get('/products', productsController.getProducts)
+router.get('/products',isAdmin, locals,  productsController.getProducts)
 
 // path, middleware, controller
 /*
@@ -17,7 +17,7 @@ router.get('/add-product', (req, res, next) => {
 } ,productsController.getAddProduct)
 */
 router.get('/add-product', isAdmin, locals, productsController.getAddProduct)
-router.post('/add-product', isAdmin, productsController.postAddProduct);
+router.post('/add-product', isAdmin, locals, productsController.postAddProduct);
 
 router.get('/products/:productid', isAdmin, locals, productsController.getEditProduct)
 router.post('/products', isAdmin, locals, productsController.postEditProduct);

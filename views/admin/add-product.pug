@@ -1,30 +1,32 @@
 extends ../layouts/main-layout.pug
-block content 
+block content
+    if errorMessage
+        div.alert.alert-danger.text-center !{errorMessage}
     form(action="/admin/add-product" method="post")
 
         input(type="hidden" name="_csrf" value=`${csrfToken}`)
         div.form-group.row
             label( for="name").col-sm-2.col-form-label Admin Name
             div.col-md-10
-                input( type="text"  name="name")#name.form-control
+                input( type="text"  name="name" value=`${inputs.name}`)#name.form-control
 
         div.form-group.row
             label( for="price").col-sm-2.col-form-label Price
             div.col-md-10
-                input( type="text"  name="price")#price.form-control
-
-        div.form-group.row
-            label( for="categoryid").col-sm-2.col-form-label Selected Category
-            div.col-md-10
-                select( name="categoryid")#categoryid.form-control
-                    option(value="-1") Select Category
-                    each category in categories
-                        option(value=`${category._id}`) #{category.name}
+                input( type="text"  name="price" value=`${inputs.price}`)#price.form-control
+        //
+        //div.form-group.row
+        //    label( for="categoryid").col-sm-2.col-form-label Selected Category
+        //    div.col-md-10
+        //        select( name="categoryid")#categoryid.form-control
+        //            option(value="-1") Select Category
+        //            each category in categories
+        //                option(value=`${category._id}`) #{category.name}
 
         div.form-group.row
             label( for="description").col-sm-2.col-form-label Description
             div.col-md-10
-                textarea( type="text"  name="description")#description.form-control
+                textarea( type="text"  name="description")#description.form-control #{inputs.description}
         div.form-group.row
             label( for="imageUrl").col-sm-2.col-form-label Image
             div.col-md-10

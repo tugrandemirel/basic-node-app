@@ -16,7 +16,7 @@ module.exports.getProducts = (req, res, next) =>{
                 action: req.query.action
             })
         }).catch((error) => {
-            console.log(error);
+           next(error);
         });
  }
 
@@ -28,6 +28,9 @@ module.exports.getProducts = (req, res, next) =>{
                 categories: categories,
                 path: '/admin/add-product'
             });
+        })
+        .catch(err => {
+           next(err)
         })
 }
 
@@ -50,6 +53,54 @@ exports.postAddProduct = (req, res, next) => {
             res.redirect('/admin/products');
         }).catch((err) => {
             console.log(err);
+        if (err.name === 'ValidationError'){
+            var message = '';
+            for(field in err.errors){
+                message += err.errors[field].message + '<br>';
+            }
+            res.render('admin/add-product', {
+                title: 'Add a new product',
+                path: '/admin/add-product',
+                errorMessage: message,
+                csrfToken: req.csrfToken(),
+                inputs: {
+                    name: name,
+                    price: price,
+                    description: description,
+                    imageUrl: imageUrl
+                }
+            })
+        }else{
+            // hata mesajı göster
+           /* res.render('admin/add-product', {
+                title: 'Add a new product',
+                path: '/admin/add-product',
+                errorMessage: 'Beklenmedik bir hata oldu. Lütfen daha sonra tekrar deneyiniz.',
+                csrfToken: req.csrfToken(),
+                inputs: {
+                    name: name,
+                    price: price,
+                    description: description,
+                    imageUrl: imageUrl
+                }
+            })*/
+            // yönlendirme yapılabilir
+            /*res.status(500).render('admin/add-product', {
+                title: 'Add a new product',
+                path: '/admin/add-product',
+                errorMessage: 'Beklenmedik bir hata oldu. Lütfen daha sonra tekrar deneyiniz.',
+                csrfToken: req.csrfToken(),
+                inputs: {
+                    name: name,
+                    price: price,
+                    description: description,
+                    imageUrl: imageUrl
+                }
+            })*/
+
+            // 500 hata kodu gösterebilir(server hatası)
+            next(err);
+        }
     })
 }
 
@@ -88,7 +139,7 @@ exports.postAddProduct = (req, res, next) => {
                 })
         })
         .catch((err) => {
-            console.log(err);
+            next(err);
         });
 
 }
@@ -112,7 +163,7 @@ exports.postEditProduct = (req, res, next) => {
     }).then(() => {
         res.redirect('/admin/products?action=edit');
     }).catch(err => {
-        console.log(err)
+        next(err);
     })
 }
 
@@ -125,7 +176,7 @@ exports.postDeleteProduct = (req, res, next) => {
             res.redirect('/admin/products?action=delete');
         })
         .catch((err) => {
-            console.log(err);
+            next(err);
         })
 }
 
@@ -138,7 +189,9 @@ exports.getCategories = (req, res, next) => {
                 path: '/admin/categories',
                 action: req.query.action
         })
-        }).catch((error) => {console.log(error);})
+        }).catch((error) => {
+        next(error);
+        })
 }
 
 exports.getAddCategory = (req, res, next) => {
@@ -159,7 +212,7 @@ exports.postAddCategory = (req, res, next) => {
         .then(() => {
             res.redirect('/admin/categories?action=create');
         }).catch((err) => {
-            console.log(err);
+        next(err)
     })
 }
 
@@ -178,7 +231,7 @@ exports.getEditCategory = (req, res, next) => {
             }
         })
         .catch((err) => {
-            console.log(err);
+            next(err);
         });
 }
 
@@ -194,7 +247,9 @@ exports.postEditCategories = (req, res, next) => {
         }).then(() => {
             res.redirect('/admin/categories?action=edit');
         })
-        .catch((err) => {console.log(err);})
+        .catch((err) => {
+            next(err)
+        })
 }
 
 exports.postDeleteCategory = (req, res, next) => {
@@ -205,5 +260,7 @@ exports.postDeleteCategory = (req, res, next) => {
             console.log('Category has been deleted')
             res.redirect('/admin/categories?action=delete');
         })
-        .catch((err) => {console.log(err);})
+        .catch((err) =>
+            next(err)
+        )
 }
