@@ -99,8 +99,7 @@ exports.postAddProduct = (req, res, next) => {
             })*/
 
             // 500 hata kodu gösterebilir(server hatası)
-            res.redirect('/500')
-
+            next(err);
         }
     })
 }
@@ -140,7 +139,7 @@ exports.postAddProduct = (req, res, next) => {
                 })
         })
         .catch((err) => {
-            res.redirect('/500')
+            next(err);
         });
 
 }
@@ -164,7 +163,7 @@ exports.postEditProduct = (req, res, next) => {
     }).then(() => {
         res.redirect('/admin/products?action=edit');
     }).catch(err => {
-        res.redirect('/500')
+        next(err);
     })
 }
 
@@ -177,7 +176,7 @@ exports.postDeleteProduct = (req, res, next) => {
             res.redirect('/admin/products?action=delete');
         })
         .catch((err) => {
-            res.redirect('/500')
+            next(err);
         })
 }
 
@@ -191,7 +190,7 @@ exports.getCategories = (req, res, next) => {
                 action: req.query.action
         })
         }).catch((error) => {
-            res.redirect('/500')
+        next(err);
         })
 }
 
@@ -232,7 +231,7 @@ exports.getEditCategory = (req, res, next) => {
             }
         })
         .catch((err) => {
-            res.redirect('/500')
+            next(err);
         });
 }
 
@@ -260,6 +259,6 @@ exports.postDeleteCategory = (req, res, next) => {
             res.redirect('/admin/categories?action=delete');
         })
         .catch((err) =>
-            res.redirect('/500')
+            next(err)
         )
 }
