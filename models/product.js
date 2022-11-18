@@ -7,9 +7,14 @@ const productSchema = mongoose.Schema({
     },
     price: {
         type: Number,
-        required: true
+        required: function () {
+            return this.isActive
+        }
     },
-    description: String,
+    description: {
+        type: String,
+        maxlength: 2000
+    },
     imageUrl: String,
     date: {
         type: Date,
@@ -18,6 +23,18 @@ const productSchema = mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+    },
+    tags: {
+        type: Array,
+        validate: {
+            validator: function (v) {
+                return v && v.length > 0;
+            },
+            message: 'A product should have at least one tag.'
+        }
+    },
+    isActive: {
+        type: Boolean,
     },
     categories: [{
         type: mongoose.Schema.Types.ObjectId,
