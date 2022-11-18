@@ -8,7 +8,7 @@ const locals = require("../middleware/locals");
 router.get('/', locals, shopController.getIndex)
 router.get('/products', locals, shopController.getProducts)
 router.get('/product/:productid', locals, shopController.getProduct)
-router.get('/categories/:categoryid', shopController.getProductsByCategoryId)
+router.get('/categories/:categoryid', locals, shopController.getProductsByCategoryId)
 router.get('/cart', isAuthenticated, locals, shopController.getCart)
 router.post('/cart', isAuthenticated, locals, shopController.postCart)
 router.post('/delete-cartitem', isAuthenticated, locals, shopController.postCartItemDelete)
