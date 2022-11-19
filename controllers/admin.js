@@ -30,8 +30,7 @@ module.exports.getProducts = (req, res, next) =>{
                     inputs: {
                         name: '',
                         price: '',
-                        description: '',
-                        imageUrl: ''
+                        description: ''
                     }
                 })
             })
@@ -46,7 +45,25 @@ exports.postAddProduct = (req, res, next) => {
     const price = req.body.price;
     const file = req.file;
     const description = req.body.description;
-    console.log(file)
+    if (!file){
+        Category.find()
+            .then(categories => {
+                return res.render('admin/add-product', {
+                    title: 'Admin Products',
+                    categories: categories,
+                    errorMessage: 'Lütfen bir resim seçiniz',
+                    path: '/admin/add-product',
+                    inputs: {
+                        name: name,
+                        price: price,
+                        description: description
+                    }
+                })
+            })
+            .catch(err => {
+                next(err)
+            })
+    }
     const product = new Product({
         name: name,
         price: price,
@@ -125,7 +142,6 @@ exports.postAddProduct = (req, res, next) => {
         .then(product => {
             Category.find()
                 .then(categories => {
-
                     categories = categories.map(category => {
                         if (product.categories){
                             product.categories.find(item => {
@@ -155,18 +171,23 @@ exports.postEditProduct = (req, res, next) => {
     const id = req.body.id;
     const name = req.body.name;
     const price = req.body.price;
-    const imageUrl = req.body.imageUrl;
+    const file = req.file;
     const categories = req.body.categoryids;
     const description = req.body.description;
 
+    const product = {
+        name: name,
+        price: price,
+        description: description,
+        categories: categories
+    }
+
+    if(file){
+        product.imageUrl = file.filename;
+    }
+
     Product.update({ _id: id, userId: req.user._id }, {
-        $set: {
-            name: name,
-            price: price,
-            imageUrl: imageUrl,
-            description: description,
-            categories: categories
-        }
+        $set: product
     }).then(() => {
         res.redirect('/admin/products?action=edit');
     }).catch(err => {
