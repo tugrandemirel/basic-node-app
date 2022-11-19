@@ -23,12 +23,12 @@ module.exports.getProducts = (req, res, next) =>{
  exports.getAddProduct = (req, res, next) =>{
     Category.find()
         .then(categories => {
-            res.render('admin/add-product', {
-                title: 'Add a new product',
-                categories: categories,
-                path: '/admin/add-product'
-            });
-        })
+                res.render('admin/add-product', {
+                    title: 'Admin Products',
+                    categories: categories,
+                    path: '/admin/add-product'
+                })
+            })
         .catch(err => {
            next(err)
         })
