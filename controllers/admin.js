@@ -26,7 +26,13 @@ module.exports.getProducts = (req, res, next) =>{
                 res.render('admin/add-product', {
                     title: 'Admin Products',
                     categories: categories,
-                    path: '/admin/add-product'
+                    path: '/admin/add-product',
+                    inputs: {
+                        name: '',
+                        price: '',
+                        description: '',
+                        imageUrl: ''
+                    }
                 })
             })
         .catch(err => {
@@ -38,14 +44,15 @@ exports.postAddProduct = (req, res, next) => {
 
     const name = req.body.name;
     const price = req.body.price;
-    const imageUrl = req.body.imageUrl;
+    const file = req.file;
     const description = req.body.description;
-
+    console.log(file)
     const product = new Product({
         name: name,
         price: price,
         description: description,
-        imageUrl: imageUrl,
+        tags: ['test'],
+        imageUrl: file.filename,
         userId: req.user._id
     })
     product.save()
@@ -67,7 +74,7 @@ exports.postAddProduct = (req, res, next) => {
                     name: name,
                     price: price,
                     description: description,
-                    imageUrl: imageUrl
+                   imageUrl: file.filename
                 }
             })
         }else{
