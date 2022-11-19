@@ -1,6 +1,6 @@
 const Product = require('../models/product')
 const Category = require('../models/category')
-
+const fs = require('fs');
 module.exports.getProducts = (req, res, next) =>{
     Product.find({ userId: req.user._id})
         .populate('userId', 'name')
@@ -175,37 +175,52 @@ exports.postEditProduct = (req, res, next) => {
     const categories = req.body.categoryids;
     const description = req.body.description;
 
-    const product = {
-        name: name,
-        price: price,
-        description: description,
-        categories: categories
-    }
+    Product.findOne({ _id: id, userId: req.user._id})
+        .then(product => {
+            if (!product)
+                return res.redirect('/')
+            product.name = name;
+            product.price = price;
+            product.description = description;
+            product.categories = categories;
 
-    if(file){
-        product.imageUrl = file.filename;
-    }
-
-    Product.update({ _id: id, userId: req.user._id }, {
-        $set: product
-    }).then(() => {
-        res.redirect('/admin/products?action=edit');
-    }).catch(err => {
-        next(err);
-    })
+            if(file){
+                // resim sil
+                fs.unlink('public/img/' + product.imageUrl, (err) => {
+                    if (err) console.log(err);
+                })
+                product.imageUrl = file.filename;
+            }
+            return product.save()
+        })
+        .then((result) => {
+            res.redirect('/admin/products?action=edit');
+        })
+        .catch(err => {
+            next(err);
+        })
 }
 
 exports.postDeleteProduct = (req, res, next) => {
     const productid = req.body.productid;
-    Product.deleteOne({ _id: productid, userId: req.user._id })
-        .then((result) => {
+    Product.findOne({_id: productid, userId: req.user._id})
+        .then(product => {
+            if(!product)
+                return next(new Error('Ürün bulunamadı'));
+            // resim sil
+            fs.unlink('public/img/' + product.imageUrl, (err) => {
+                if (err) console.log(err);
+            })
+            return Product.deleteOne({ _id: productid, userId: req.user._id })
+        }).then((result) => {
             if (result.deletedCount === 0)
-                return res.redirect('/')
+                return next(new Error('Ürün bulunamadı'));
             res.redirect('/admin/products?action=delete');
         })
         .catch((err) => {
             next(err);
         })
+
 }
 
 exports.getCategories = (req, res, next) => {
