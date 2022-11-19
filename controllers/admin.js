@@ -1,6 +1,6 @@
 const Product = require('../models/product')
 const Category = require('../models/category')
-
+const fs = require('fs');
 module.exports.getProducts = (req, res, next) =>{
     Product.find({ userId: req.user._id})
         .populate('userId', 'name')
@@ -26,7 +26,12 @@ module.exports.getProducts = (req, res, next) =>{
                 res.render('admin/add-product', {
                     title: 'Admin Products',
                     categories: categories,
-                    path: '/admin/add-product'
+                    path: '/admin/add-product',
+                    inputs: {
+                        name: '',
+                        price: '',
+                        description: ''
+                    }
                 })
             })
         .catch(err => {
@@ -38,14 +43,33 @@ exports.postAddProduct = (req, res, next) => {
 
     const name = req.body.name;
     const price = req.body.price;
-    const imageUrl = req.body.imageUrl;
+    const file = req.file;
     const description = req.body.description;
-
+    if (!file){
+        Category.find()
+            .then(categories => {
+                return res.render('admin/add-product', {
+                    title: 'Admin Products',
+                    categories: categories,
+                    errorMessage: 'Lütfen bir resim seçiniz',
+                    path: '/admin/add-product',
+                    inputs: {
+                        name: name,
+                        price: price,
+                        description: description
+                    }
+                })
+            })
+            .catch(err => {
+                next(err)
+            })
+    }
     const product = new Product({
         name: name,
         price: price,
         description: description,
-        imageUrl: imageUrl,
+        tags: ['test'],
+        imageUrl: file.filename,
         userId: req.user._id
     })
     product.save()
@@ -67,7 +91,7 @@ exports.postAddProduct = (req, res, next) => {
                     name: name,
                     price: price,
                     description: description,
-                    imageUrl: imageUrl
+                   imageUrl: file.filename
                 }
             })
         }else{
@@ -118,7 +142,6 @@ exports.postAddProduct = (req, res, next) => {
         .then(product => {
             Category.find()
                 .then(categories => {
-
                     categories = categories.map(category => {
                         if (product.categories){
                             product.categories.find(item => {
@@ -148,36 +171,56 @@ exports.postEditProduct = (req, res, next) => {
     const id = req.body.id;
     const name = req.body.name;
     const price = req.body.price;
-    const imageUrl = req.body.imageUrl;
+    const file = req.file;
     const categories = req.body.categoryids;
     const description = req.body.description;
 
-    Product.update({ _id: id, userId: req.user._id }, {
-        $set: {
-            name: name,
-            price: price,
-            imageUrl: imageUrl,
-            description: description,
-            categories: categories
-        }
-    }).then(() => {
-        res.redirect('/admin/products?action=edit');
-    }).catch(err => {
-        next(err);
-    })
+    Product.findOne({ _id: id, userId: req.user._id})
+        .then(product => {
+            if (!product)
+                return res.redirect('/')
+            product.name = name;
+            product.price = price;
+            product.description = description;
+            product.categories = categories;
+
+            if(file){
+                // resim sil
+                fs.unlink('public/img/' + product.imageUrl, (err) => {
+                    if (err) console.log(err);
+                })
+                product.imageUrl = file.filename;
+            }
+            return product.save()
+        })
+        .then((result) => {
+            res.redirect('/admin/products?action=edit');
+        })
+        .catch(err => {
+            next(err);
+        })
 }
 
 exports.postDeleteProduct = (req, res, next) => {
     const productid = req.body.productid;
-    Product.deleteOne({ _id: productid, userId: req.user._id })
-        .then((result) => {
+    Product.findOne({_id: productid, userId: req.user._id})
+        .then(product => {
+            if(!product)
+                return next(new Error('Ürün bulunamadı'));
+            // resim sil
+            fs.unlink('public/img/' + product.imageUrl, (err) => {
+                if (err) console.log(err);
+            })
+            return Product.deleteOne({ _id: productid, userId: req.user._id })
+        }).then((result) => {
             if (result.deletedCount === 0)
-                return res.redirect('/')
+                return next(new Error('Ürün bulunamadı'));
             res.redirect('/admin/products?action=delete');
         })
         .catch((err) => {
             next(err);
         })
+
 }
 
 exports.getCategories = (req, res, next) => {

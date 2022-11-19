@@ -1,6 +1,6 @@
 extends ../layouts/main-layout.pug
 block content 
-    form(action="/admin/products" method="post")
+    form(action="/admin/products" method="post" enctype="multipart/form-data")
 
         input(type="hidden" name="_csrf" value=`${csrfToken}`)
         input(type="hidden" name="id" value=`${product._id}`)
@@ -24,15 +24,19 @@ block content
                         br
 
         div.form-group.row
-            label( for="description").col-sm-2.col-form-label Description
+            label( for="editor").col-sm-2.col-form-label Description
             div.col-md-10
-                textarea( type="text"  name="description")#description.form-control #{product.description}
+                textarea(name="description" cols="30" rows="10" id="editor").form-control #{product.description}
 
         div.form-group.row
             label( for="imageUrl").col-sm-2.col-form-label Image
             div.col-md-10
-                input( type="text"  name="imageUrl" value=`${product.imageUrl}`)#imageUrl.form-control
+                img(src=`/img/${product.imageUrl}` alt="product image" width="100" height="100")
+                input( type="file"  name="image" value=`${product.imageUrl}`)#imageUrl.pl-2
 
         div.form-group.row
             div.col-md-10.offset-sm-2
                 input(type="submit" value="Save Admin").btn.btn-primary
+block script
+    script(src="https://cdn.ckeditor.com/4.11.3/standard/ckeditor.js")
+    script(src="/js/script.js")

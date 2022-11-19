@@ -2,7 +2,7 @@ extends ../layouts/main-layout.pug
 block content
     if errorMessage
         div.alert.alert-danger.text-center !{errorMessage}
-    form(action="/admin/add-product" method="post")
+    form(action="/admin/add-product" method="post" enctype="multipart/form-data")
 
         input(type="hidden" name="_csrf" value=`${csrfToken}`)
         div.form-group.row
@@ -24,14 +24,17 @@ block content
                         option(value=`${category._id}`) #{category.name}
 
         div.form-group.row
-            label( for="description").col-sm-2.col-form-label Description
+            label( for="editor").col-sm-2.col-form-label Description
             div.col-md-10
-                textarea( type="text"  name="description")#description.form-control #{inputs.description}
+                textarea(name="description" cols="30" rows="10" id="editor").form-control #{inputs.description}
         div.form-group.row
             label( for="imageUrl").col-sm-2.col-form-label Image
             div.col-md-10
-                input( type="file"  name="imageUrl")#imageUrl.form-control-file
+                input( type="file"  name="image")#imageUrl.form-control-file
 
         div.form-group.row
             div.col-md-10.offset-sm-2
                 input(type="submit" value="Save Admin").btn.btn-primary
+block script
+    script(src="https://cdn.ckeditor.com/4.11.3/standard/ckeditor.js")
+    script(src="/js/script.js")
